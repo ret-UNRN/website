@@ -56,7 +56,13 @@ export const useDesktopStore = create<DesktopStore>((set, get) => ({
     set((state) => {
       const next = state.theme === 'dark' ? 'light' : 'dark'
       localStorage.setItem('theme', next)
-      document.documentElement.classList.toggle('dark', next === 'dark')
+      if (next === 'dark') {
+        document.documentElement.classList.add('dark')
+        document.documentElement.classList.remove('light')
+      } else {
+        document.documentElement.classList.remove('dark')
+        document.documentElement.classList.add('light')
+      }
       return { theme: next }
     }),
 

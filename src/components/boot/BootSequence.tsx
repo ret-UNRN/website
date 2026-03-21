@@ -25,13 +25,13 @@ function buildAsciiBar(pct: number): string {
   return '[' + '#'.repeat(filled) + '-'.repeat(empty) + ']'
 }
 
-const typeClass = (type: string): string =>
+const typeColor = (type: string): string =>
   ({
-    ok: 'text-green',
-    warn: 'text-yellow-500',
-    err: 'text-accent',
-    info: 'text-text',
-  })[type] ?? 'text-text'
+    ok: '#00cc66',
+    warn: '#ffff00',
+    err: '#cc0000',
+    info: '#e8e8e8',
+  })[type] ?? '#e8e8e8'
 
 export default function BootSequence() {
   const setBootCompleted = useDesktopStore((s) => s.setBootCompleted)
@@ -132,7 +132,7 @@ export default function BootSequence() {
   const displayProgress = phase === 'progress' ? progress : logProgress
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-black font-mono text-sm text-text">
+    <div className="relative h-full w-full overflow-hidden font-mono text-sm" style={{ backgroundColor: '#0d0d0d', color: '#e8e8e8' }}>
       {/* Boot screen (logo + log + progress) */}
       <div
         className="mx-auto flex h-full max-w-3xl flex-col px-6 transition-opacity duration-500 ease-in"
@@ -144,13 +144,13 @@ export default function BootSequence() {
           style={{ opacity: phase === 'logo' ? 0 : 1 }}
         >
           <div className="text-center text-xs leading-tight tracking-wider">
-            <span className="text-accent">&gt;_</span>
+            <span style={{ color: '#cc0000' }}>&gt;_</span>
             <br />
-            <span className="text-text">ret</span>
-            <span className="text-accent">UNRN</span>
-            <span className="text-accent">;</span>
+            <span style={{ color: '#e8e8e8' }}>ret</span>
+            <span style={{ color: '#cc0000' }}>UNRN</span>
+            <span style={{ color: '#cc0000' }}>;</span>
           </div>
-          <div className="text-xs tracking-[0.15em] text-muted">
+          <div className="text-xs tracking-[0.15em]" style={{ color: '#666666' }}>
             RETUNRN OS v2026.1
           </div>
         </div>
@@ -165,21 +165,21 @@ export default function BootSequence() {
               key={i}
               className="animate-[slide-in_0.12s_ease_forwards] overflow-hidden text-ellipsis whitespace-nowrap"
             >
-              <span className="inline-block min-w-[140px] text-[#444]">
+              <span className="inline-block min-w-[140px]" style={{ color: '#444' }}>
                 {line.ts}
               </span>{' '}
-              <span className={typeClass(line.type)}>{line.msg}</span>
+              <span style={{ color: typeColor(line.type) }}>{line.msg}</span>
             </div>
           ))}
 
           {/* ASCII progress bar — inline as the next log line */}
           {(phase === 'log' || phase === 'progress') && (
             <div className="mt-1 whitespace-nowrap">
-              <span className="text-muted">iniciando sistema... </span>
-              <span className="text-accent">
+              <span style={{ color: '#888888' }}>iniciando sistema... </span>
+              <span style={{ color: '#cc0000' }}>
                 {buildAsciiBar(displayProgress)}
               </span>
-              <span className="text-muted">
+              <span style={{ color: '#888888' }}>
                 {' '}
                 {String(displayProgress).padStart(3, ' ')}%
               </span>

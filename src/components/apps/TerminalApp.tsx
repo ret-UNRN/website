@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, KeyboardEvent } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useDesktopStore } from '../../store/useDesktopStore'
 import { COMMANDS } from './terminalCommands'
 import type { AppId } from '../../store/useDesktopStore'
@@ -90,7 +90,7 @@ export default function TerminalApp() {
 
   return (
     <div
-      className="flex h-full flex-col bg-black px-4 py-3 font-mono text-sm"
+      className="flex h-full flex-col bg-surface-2 px-4 py-3 font-mono text-sm transition-colors"
       onClick={() => inputRef.current?.focus()}
     >
       {/* Single scrollable area — prompt follows output naturally */}

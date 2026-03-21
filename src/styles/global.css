@@ -113,7 +113,7 @@ body {
 /* Scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #2e2e2e transparent;
+  scrollbar-color: var(--color-border) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -126,12 +126,21 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #2e2e2e;
+  background-color: var(--color-border);
   border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #444444;
+  background-color: var(--color-muted);
+}
+
+/* Window inactive overlay */
+.window-inactive-overlay {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .window-inactive-overlay {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 /* Reduced motion */

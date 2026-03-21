@@ -95,7 +95,6 @@ export default function Window({
   const defW = defaultSize?.width ?? (areaW - GAP * 2) * 0.9
   const defH = defaultSize?.height ?? (availH - topGap - GAP) * 0.9
   const centerX = areaLeft + areaW / 2
-  const centerY = topGap + (height - topGap) / 2
   const defX = defaultPosition?.x ?? centerX - defW / 2 + cascade
   const defY = defaultPosition?.y ?? topGap + GAP + cascade
 
@@ -120,7 +119,7 @@ export default function Window({
         <div className="rnd-drag-handle">{titlebar}</div>
         <div className="min-w-0 flex-1 overflow-auto">{children}</div>
         {!isActive && (
-          <div className="absolute inset-0 rounded-xl bg-black/35 pointer-events-none" />
+          <div className="window-inactive-overlay absolute inset-0 rounded-xl pointer-events-none" />
         )}
       </div>
     </Rnd>

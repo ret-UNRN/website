@@ -14,7 +14,14 @@
     <script>
       const t = localStorage.getItem('theme')
       const d = window.matchMedia('(prefers-color-scheme: dark)').matches
-      if (t === 'dark' || (!t && d)) document.documentElement.classList.add('dark')
+      const isDark = t === 'dark' || (!t && d)
+      if (isDark) {
+        document.documentElement.classList.add('dark')
+        document.documentElement.classList.remove('light')
+      } else {
+        document.documentElement.classList.add('light')
+        document.documentElement.classList.remove('dark')
+      }
     </script>
   </head>
   <body>

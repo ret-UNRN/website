@@ -5,7 +5,7 @@ import DiscordIcon from '../ui/DiscordIcon'
 
 export default function Taskbar() {
   return (
-    <div className="flex h-8 shrink-0 items-center bg-black/80 px-4 font-mono text-xs backdrop-blur-sm">
+    <div className="flex h-8 shrink-0 items-center bg-surface px-4 font-mono text-xs backdrop-blur-sm transition-colors">
       {/* Left: retUNRN brand */}
       <div className="flex flex-1 items-center">
         <span className="text-xs text-muted">

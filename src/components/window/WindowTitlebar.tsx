@@ -31,12 +31,13 @@ export default function WindowTitlebar({
           e.stopPropagation()
           onClose()
         }}
-        className="group ml-4 flex h-[14px] w-[14px] shrink-0 items-center justify-center rounded-full bg-[#3c3c3c] transition-colors hover:bg-accent"
+        className="group ml-4 flex h-[14px] w-[14px] shrink-0 items-center justify-center rounded-full bg-border transition-colors hover:bg-accent"
         aria-label="Cerrar"
       >
         <X
           size={8}
           className="opacity-0 transition-opacity group-hover:opacity-100"
+          style={{ color: '#ffffff' }}
           strokeWidth={2.5}
         />
       </button>
