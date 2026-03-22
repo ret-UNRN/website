@@ -19,23 +19,23 @@ export default function WelcomeApp() {
     <div className="h-full overflow-auto px-6 py-6">
       <div className="mx-auto max-w-2xl">
         {/* Meta */}
-        <p className="mb-5 font-mono text-sm tracking-wider text-muted">
+        <p className="mb-5 font-mono text-sm tracking-wider text-muted" style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '50ms' }}>
           // unrn sede andina &middot; bariloche &middot; patagonia &middot;{' '}
           <span className="text-accent">2026</span>
         </p>
 
         {/* Heading */}
-        <h1 className="font-mono text-3xl font-bold leading-tight text-text">
+        <h1 className="font-mono text-3xl font-bold leading-tight text-text" style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '120ms' }}>
           Club de
           <br />
           Programaci&oacute;n
         </h1>
-        <div className="font-mono text-3xl font-bold leading-tight text-accent">
+        <div className="font-mono text-3xl font-bold leading-tight text-accent" style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '150ms' }}>
           retUNRN
         </div>
 
         {/* Prompt */}
-        <p className="mt-5 mb-7 font-mono text-base text-green">
+        <p className="mt-5 mb-7 font-mono text-base text-green" style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '220ms' }}>
           &gt;&gt;&gt;{' '}
           <span className="text-text">
             aprender, competir y construir software con impacto social
@@ -43,7 +43,7 @@ export default function WelcomeApp() {
         </p>
 
         {/* Stats */}
-        <div className="rounded-lg border border-border bg-surface-2 px-4 py-3 flex flex-col gap-3">
+        <div className="rounded-lg border border-border bg-surface-2 px-4 py-3 flex flex-col gap-3" style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '300ms' }}>
           {STATS.map((stat) => (
             <div
               key={stat.label}
@@ -69,7 +69,7 @@ export default function WelcomeApp() {
         </div>
 
         {/* Actions */}
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row" style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '380ms' }}>
           <button
             onClick={() => openWindow('about')}
             className="rounded border border-border px-5 py-2.5 font-mono text-sm text-muted transition-colors hover:border-muted hover:text-text sm:w-auto"

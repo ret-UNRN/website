@@ -34,6 +34,8 @@ export default function MobileDesktop() {
 
   const [time, setTime] = useState(() => new Date())
   const [mounted, setMounted] = useState(false)
+  const [closingId, setClosingId] = useState<AppId | null>(null)
+  const [launchingId, setLaunchingId] = useState<AppId | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -49,7 +51,12 @@ export default function MobileDesktop() {
   const hasActiveWindow = !!activeWindow
 
   const handleHome = () => {
-    if (activeWindow) minimizeWindow(activeWindow.id)
+    if (!activeWindow) return
+    setClosingId(activeWindow.id)
+    setTimeout(() => {
+      minimizeWindow(activeWindow.id)
+      setClosingId(null)
+    }, 180)
   }
 
   const handleIconClick = (id: AppId) => {
@@ -57,16 +64,20 @@ export default function MobileDesktop() {
     if (isOpen) {
       focusWindow(id)
     } else {
-      openWindow(id)
+      setLaunchingId(id)
+      setTimeout(() => {
+        openWindow(id)
+        setLaunchingId(null)
+      }, 120)
     }
   }
 
   const timeStr = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}`
 
   return (
-    <div className="flex h-full flex-col bg-bg">
+    <div className="desktop-grid fixed inset-0">
       {/* Status bar */}
-      <div className="relative flex h-11 shrink-0 items-center border-b border-border bg-surface px-4 font-mono text-xs transition-colors">
+      <div className="fixed inset-x-0 top-0 z-50 flex h-11 items-center border-b border-border bg-surface px-4 font-mono text-xs transition-colors">
         <span className="text-muted">
           ret<span className="font-bold text-accent">UNRN</span>
           <span className="ml-1 text-muted/50">OS</span>
@@ -79,8 +90,8 @@ export default function MobileDesktop() {
         </div>
       </div>
 
-      {/* Content area */}
-      <div className="relative min-h-0 flex-1 overflow-hidden">
+      {/* Content area — between bars */}
+      <div className="fixed inset-x-0 top-[2.75rem] bottom-[2.75rem] overflow-hidden">
 
         {/* Home screen — widget + grid */}
         <div
@@ -88,12 +99,12 @@ export default function MobileDesktop() {
           style={{ opacity: hasActiveWindow ? 0 : 1, pointerEvents: hasActiveWindow ? 'none' : 'auto' }}
         >
           {/* Widget */}
-          <div className="mx-4 mt-4 rounded-2xl border border-border bg-surface px-4 py-4">
-            <p className="mb-0.5 font-mono text-[11px] text-muted">Club de Programación</p>
+          <div className="mx-4 mt-4 rounded-2xl border border-border bg-surface px-4 py-4 animate-[slide-in_250ms_ease-out_both]">
+            <p className="mb-0.5 font-mono text-xs text-muted">Club de Programación</p>
             <p className="font-mono text-lg font-bold leading-tight text-text">
               ret<span className="text-accent">UNRN</span>
             </p>
-            <p className="mt-1.5 mb-3 font-mono text-[11px] leading-relaxed text-text/60">
+            <p className="mt-1.5 mb-3 font-mono text-xs leading-relaxed text-text/60">
               Espacio extracurricular de programación de la UNRN Sede Andina, Bariloche.
             </p>
 
@@ -102,7 +113,7 @@ export default function MobileDesktop() {
               { label: 'proyectos', width: 60 },
               { label: 'miembros',  width: 100 },
             ].map((s) => (
-              <div key={s.label} className="mb-1.5 flex items-center gap-3 font-mono text-[11px]">
+              <div key={s.label} className="mb-1.5 flex items-center gap-3 font-mono text-xs">
                 <span className="w-14 shrink-0 text-muted">{s.label}</span>
                 <div className="h-[3px] flex-1 overflow-hidden rounded-full bg-surface-2">
                   <div
@@ -117,13 +128,16 @@ export default function MobileDesktop() {
               <button
                 onClick={() => handleIconClick('about')}
                 className="flex-1 touch-manipulation rounded-lg border border-border py-2 font-mono text-xs text-muted transition-colors active:text-text"
+                style={{ animation: launchingId === 'about' ? 'icon-launch 120ms ease-out both' : undefined }}
               >
                 Conocé el club
               </button>
               <button
                 onClick={() => handleIconClick('form')}
                 className="flex-1 touch-manipulation rounded-lg bg-accent py-2 font-mono text-xs font-medium text-white transition-colors active:bg-accent-h"
+                style={{ animation: launchingId === 'form' ? 'icon-launch 120ms ease-out both' : undefined }}
               >
+
                 Quiero ser parte
               </button>
             </div>
@@ -133,25 +147,30 @@ export default function MobileDesktop() {
           {/* App grid — two rows */}
           <div className="mt-auto grid grid-cols-3 gap-x-2 gap-y-3 px-6 pb-5">
             {/* Row 1: apps */}
-            {APPS.filter((a) => !['welcome', 'about', 'contact', 'form'].includes(a.id)).map((app) => {
+            {APPS.filter((a) => !['welcome', 'about', 'contact', 'form'].includes(a.id)).map((app, i) => {
               const Icon = app.icon
               const isOpen = windows.some((w) => w.id === app.id && !w.minimized)
               return (
-                <button
+                <div
                   key={app.id}
-                  onClick={() => handleIconClick(app.id as AppId)}
-                  className="flex flex-col items-center gap-1.5 touch-manipulation active:scale-95 transition-transform duration-100"
+                  style={{ animation: 'slide-in 200ms ease-out both', animationDelay: `${i * 50 + 100}ms` }}
                 >
-                  <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-sm">
-                    <Icon size={24} className="text-text/70" />
-                    {isOpen && (
-                      <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent" />
-                    )}
-                  </div>
-                  <span className="w-full text-center font-mono text-[10px] leading-tight text-text/60 md:text-xs">
-                    {app.label}
-                  </span>
-                </button>
+                  <button
+                    onClick={() => handleIconClick(app.id as AppId)}
+                    className="flex flex-col items-center gap-1.5 touch-manipulation w-full"
+                    style={{ animation: launchingId === app.id ? 'icon-launch 120ms ease-out both' : undefined }}
+                  >
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-sm">
+                      <Icon size={24} className="text-text/70" />
+                      {isOpen && (
+                        <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-accent" />
+                      )}
+                    </div>
+                    <span className="w-full text-center font-mono text-[0.7rem] leading-tight text-text/60">
+                      {app.label}
+                    </span>
+                  </button>
+                </div>
               )
             })}
             {/* Row 2: links */}
@@ -160,59 +179,71 @@ export default function MobileDesktop() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center gap-1.5 touch-manipulation active:scale-95 transition-transform duration-100"
+              style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '250ms' }}
             >
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-sm">
                 <DiscordIcon size={24} />
               </div>
-              <span className="w-full text-center font-mono text-[10px] leading-tight text-text/60 md:text-xs">discord</span>
+              <span className="w-full text-center font-mono text-[0.7rem] leading-tight text-text/60">discord</span>
             </a>
             <a
               href="https://github.com/ret-unrn"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center gap-1.5 touch-manipulation active:scale-95 transition-transform duration-100"
+              style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '300ms' }}
             >
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-sm">
                 <Github size={24} className="text-text/70" />
               </div>
-              <span className="w-full text-center font-mono text-[10px] leading-tight text-text/60 md:text-xs">github</span>
+              <span className="w-full text-center font-mono text-[0.7rem] leading-tight text-text/60">github</span>
             </a>
-            <button
-              onClick={() => handleIconClick('contact')}
-              className="flex flex-col items-center gap-1.5 touch-manipulation active:scale-95 transition-transform duration-100"
-            >
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-sm">
-                <Mail size={24} className="text-text/70" />
-              </div>
-              <span className="w-full text-center font-mono text-[10px] leading-tight text-text/60 md:text-xs">contacto</span>
-            </button>
+            <div style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '350ms' }}>
+              <button
+                onClick={() => handleIconClick('contact')}
+                className="flex w-full flex-col items-center gap-1.5 touch-manipulation"
+                style={{ animation: launchingId === 'contact' ? 'icon-launch 120ms ease-out both' : undefined }}
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-sm">
+                  <Mail size={24} className="text-text/70" />
+                </div>
+                <span className="w-full text-center font-mono text-[0.7rem] leading-tight text-text/60">contacto</span>
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Active window — fullscreen */}
-        {windows.map((win) => {
-          const app = APPS.find((a) => a.id === win.id)
-          const AppComponent = APP_COMPONENTS[win.id]
-          if (!AppComponent || win.minimized || !app) return null
-
-          return (
-            <div
-              key={win.id}
-              className="absolute inset-0 flex flex-col bg-surface transition-opacity duration-150"
-              style={{ zIndex: win.zIndex }}
-            >
-              <div className="min-h-0 flex-1 overflow-auto">
-                <AppComponent />
-              </div>
-            </div>
-          )
-        })}
 
         {/* Recents overlay */}
       </div>
 
+      {/* Active window — fixed, fuera del overflow-hidden para que la animación sea visible */}
+      {windows.map((win) => {
+        const app = APPS.find((a) => a.id === win.id)
+        const AppComponent = APP_COMPONENTS[win.id]
+        if (!AppComponent || win.minimized || !app) return null
+
+        return (
+          <div
+            key={win.id}
+            className="fixed inset-x-0 flex flex-col bg-surface"
+            style={{
+              top: '2.75rem',
+              bottom: '2.75rem',
+              zIndex: win.zIndex,
+              animation: closingId === win.id
+                ? 'slide-down 180ms ease-in both'
+                : 'slide-up 200ms ease-out both',
+            }}
+          >
+            <div className="min-h-0 flex-1 overflow-auto">
+              <AppComponent />
+            </div>
+          </div>
+        )
+      })}
+
       {/* Nav bar — single home button */}
-      <div className="mobile-safe-bottom shrink-0 border-t border-border bg-surface transition-colors">
+      <div className="mobile-safe-bottom fixed inset-x-0 bottom-0 z-50 border-t border-border bg-surface transition-colors">
         <div className="flex h-11 items-center justify-center">
           <button
             onClick={handleHome}

@@ -11,7 +11,16 @@ const DELAYS = {
   splashHold: 1800,
 }
 
-const BAR_WIDTH = 40
+function getBarWidth(): number {
+  const vw = window.innerWidth
+  const availPx = Math.min(vw - 48, 720)          // px-6 a cada lado, cap max-w-3xl
+  const baseFontPx = Math.min(Math.max(14, 1.5 * vw / 100 + 9), 17)  // clamp global
+  const smFontPx = baseFontPx * 0.875              // text-sm = 0.875rem
+  const charPx = smFontPx * 0.601                  // JetBrains Mono ~0.6em por char
+  const totalChars = Math.floor(availPx / charPx)
+  const overhead = 28                              // "iniciando sistema... [" + "] 100%"
+  return Math.max(8, totalChars - overhead)
+}
 
 function getLineDelay(index: number): number {
   if (index < 3) return 100
@@ -19,9 +28,9 @@ function getLineDelay(index: number): number {
   return 160
 }
 
-function buildAsciiBar(pct: number): string {
-  const filled = Math.round((pct / 100) * BAR_WIDTH)
-  const empty = BAR_WIDTH - filled
+function buildAsciiBar(pct: number, width: number): string {
+  const filled = Math.round((pct / 100) * width)
+  const empty = width - filled
   return '[' + '#'.repeat(filled) + '-'.repeat(empty) + ']'
 }
 
@@ -42,6 +51,7 @@ export default function BootSequence() {
   const [splashVisible, setSplashVisible] = useState(false)
   const [splashFading, setSplashFading] = useState(false)
   const [bootFading, setBootFading] = useState(false)
+  const [logoError, setLogoError] = useState(false)
 
   const logRef = useRef<HTMLDivElement>(null)
   const timersRef = useRef<number[]>([])
@@ -80,13 +90,15 @@ export default function BootSequence() {
       return
     }
     const delay = getLineDelay(lineIndex)
-    addTimer(() => {
-      setLineIndex((i) => i + 1)
-      if (logRef.current) {
-        logRef.current.scrollTop = logRef.current.scrollHeight
-      }
-    }, delay)
+    addTimer(() => setLineIndex((i) => i + 1), delay)
   }, [phase, lineIndex, addTimer])
+
+  // Auto-scroll after each new line is rendered
+  useEffect(() => {
+    if (logRef.current) {
+      logRef.current.scrollTop = logRef.current.scrollHeight
+    }
+  }, [lineIndex])
 
   // Update progress during log phase (fills to ~60%)
   const logProgress =
@@ -158,14 +170,14 @@ export default function BootSequence() {
         {/* Log area */}
         <div
           ref={logRef}
-          className="flex flex-1 flex-col gap-1 overflow-y-auto pb-6"
+          className="scrollbar-hidden flex flex-1 flex-col gap-1 overflow-y-auto pb-6"
         >
           {bootLines.slice(0, lineIndex).map((line, i) => (
             <div
               key={i}
-              className="animate-[slide-in_0.12s_ease_forwards] overflow-hidden text-ellipsis whitespace-nowrap"
+              className="animate-[slide-in_0.12s_ease_forwards] break-words"
             >
-              <span className="inline-block min-w-[140px]" style={{ color: '#444' }}>
+              <span className="inline-block min-w-[100px] sm:min-w-[140px]" style={{ color: '#444' }}>
                 {line.ts}
               </span>{' '}
               <span style={{ color: typeColor(line.type) }}>{line.msg}</span>
@@ -177,7 +189,7 @@ export default function BootSequence() {
             <div className="mt-1 whitespace-nowrap">
               <span style={{ color: '#888888' }}>iniciando sistema... </span>
               <span style={{ color: '#cc0000' }}>
-                {buildAsciiBar(displayProgress)}
+                {buildAsciiBar(displayProgress, getBarWidth())}
               </span>
               <span style={{ color: '#888888' }}>
                 {' '}
@@ -196,19 +208,33 @@ export default function BootSequence() {
           pointerEvents: phase === 'splash' ? 'all' : 'none',
         }}
       >
-        <img
-          src="/logo.png"
-          alt="retUNRN"
-          className="w-[min(280px,60vw)] transition-all duration-[550ms] ease-out"
-          style={{
-            opacity: splashVisible && !splashFading ? 1 : 0,
-            transform: splashFading
-              ? 'scale(1.04)'
-              : splashVisible
-                ? 'scale(1)'
-                : 'scale(0.88)',
-          }}
-        />
+        {logoError ? (
+          <div
+            className="font-mono text-4xl font-bold transition-all duration-[550ms] ease-out"
+            style={{
+              opacity: splashVisible && !splashFading ? 1 : 0,
+              transform: splashFading ? 'scale(1.04)' : splashVisible ? 'scale(1)' : 'scale(0.88)',
+            }}
+          >
+            <span style={{ color: '#e8e8e8' }}>ret</span>
+            <span style={{ color: '#cc0000' }}>UNRN</span>
+          </div>
+        ) : (
+          <img
+            src="/logo.png"
+            alt="retUNRN"
+            className="w-[min(280px,60vw)] transition-all duration-[550ms] ease-out"
+            onError={() => setLogoError(true)}
+            style={{
+              opacity: splashVisible && !splashFading ? 1 : 0,
+              transform: splashFading
+                ? 'scale(1.04)'
+                : splashVisible
+                  ? 'scale(1)'
+                  : 'scale(0.88)',
+            }}
+          />
+        )}
         <div
           className="h-px bg-accent transition-[width] duration-[900ms] ease-out"
           style={{

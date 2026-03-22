@@ -32,8 +32,8 @@
 }
 
 html {
-  /* Scales from 14px on small phones to 17px on tablets/desktop */
-  font-size: clamp(14px, 1.5vw + 9px, 17px);
+  /* Scales from 14px (375px) to 17px (750px+) */
+  font-size: clamp(14px, 0.8vw + 11px, 17px);
 }
 
 html,
@@ -53,6 +53,12 @@ body {
 }
 
 /* Animations */
+@keyframes icon-launch {
+  0%   { scale: 1; }
+  40%  { scale: 0.82; }
+  100% { scale: 1; }
+}
+
 @keyframes blink {
   0%,
   100% {
@@ -101,6 +107,50 @@ body {
   }
 }
 
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    translate: 10px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes window-close {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.93;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -144,9 +194,61 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+/* Desktop GNOME-style wallpaper */
+.desktop-grid {
+  background: #0d0d0d;
+}
+
+.desktop-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  filter: blur(90px);
+  background:
+    radial-gradient(ellipse 70% 70% at 15% 85%, rgba(150, 0, 0, 0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 60% at 85% 15%, rgba(90, 0, 0, 0.2) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 60% 60%, rgba(40, 5, 5, 0.45) 0%, transparent 75%);
+  animation: wallpaper-shift 30s ease-in-out infinite alternate;
+}
+
+.light .desktop-grid {
+  background: #e8e8e8;
+}
+
+.light .desktop-grid::before {
+  background:
+    radial-gradient(ellipse 70% 70% at 15% 85%, rgba(204, 0, 0, 0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 60% at 85% 15%, rgba(180, 60, 60, 0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 60% 60%, rgba(150, 30, 30, 0.18) 0%, transparent 75%);
+}
+
+@keyframes wallpaper-shift {
+  0%   { transform: scale(1)    translate(0%, 0%); }
+  100% { transform: scale(1.05) translate(2%, 3%); }
+}
+
+/* Hide scrollbar but keep scrollability */
+.scrollbar-hidden {
+  scrollbar-width: none;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
 /* Safe area support for mobile devices with notch/home bar */
 .mobile-safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Theme transition — only active during the switch, not on hover/click */
+.theme-transitioning,
+.theme-transitioning * {
+  transition:
+    background-color 350ms ease,
+    color 250ms ease,
+    border-color 250ms ease,
+    fill 250ms ease !important;
 }
 
 /* Reduced motion */

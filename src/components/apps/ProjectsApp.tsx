@@ -103,7 +103,7 @@ export default function ProjectsApp() {
           href="https://github.com/ret-unrn"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 font-mono text-[11px] text-accent hover:underline"
+          className="flex items-center gap-1 font-mono text-xs text-accent hover:underline"
         >
           <ExternalLink size={10} />
           github.com/ret-unrn
@@ -112,13 +112,14 @@ export default function ProjectsApp() {
 
       {/* Repos */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {REPOS.map((repo) => (
+        {REPOS.map((repo, i) => (
           <a
             key={repo.name}
             href={repo.url}
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-lg border border-border bg-surface-2 p-4 transition-colors hover:border-accent/40"
+            style={{ animation: 'slide-in 200ms ease-out both', animationDelay: `${i * 60}ms` }}
           >
             <p className="font-mono text-sm font-semibold text-green group-hover:underline">
               {repo.name}
@@ -130,7 +131,7 @@ export default function ProjectsApp() {
               {repo.langs.map((lang) => (
                 <span
                   key={lang}
-                  className={`rounded border px-1.5 py-0.5 font-mono text-[10px] ${LANG_COLORS[lang] ?? 'text-muted border-border'}`}
+                  className={`rounded border px-1.5 py-0.5 font-mono text-[0.7rem] ${LANG_COLORS[lang] ?? 'text-muted border-border'}`}
                 >
                   {lang}
                 </span>

@@ -57,6 +57,7 @@ export const useDesktopStore = create<DesktopStore>((set, get) => ({
     set((state) => {
       const next = state.theme === 'dark' ? 'light' : 'dark'
       localStorage.setItem('theme', next)
+      document.documentElement.classList.add('theme-transitioning')
       if (next === 'dark') {
         document.documentElement.classList.add('dark')
         document.documentElement.classList.remove('light')
@@ -64,6 +65,9 @@ export const useDesktopStore = create<DesktopStore>((set, get) => ({
         document.documentElement.classList.remove('dark')
         document.documentElement.classList.add('light')
       }
+      setTimeout(() => {
+        document.documentElement.classList.remove('theme-transitioning')
+      }, 400)
       return { theme: next }
     }),
 

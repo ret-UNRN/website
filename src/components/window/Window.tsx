@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import type { LucideIcon } from 'lucide-react'
 import WindowTitlebar from './WindowTitlebar'
@@ -10,6 +10,7 @@ const TOP_PANEL_H = 32
 const GAP = 8
 const ICONS_COL_W = 140
 const CASCADE_STEP = 14
+const CLOSE_DURATION = 180
 
 interface WindowProps {
   id: AppId
@@ -36,20 +37,28 @@ export default function Window({
   const isActive = win?.zIndex === topZIndex
   const { isMobile, isTablet, width, height } = useWindowSize()
   const rndRef = useRef<Rnd>(null)
+  const [closing, setClosing] = useState(false)
 
   if (!win || win.minimized) return null
 
   const handleFocus = () => focusWindow(id)
 
+  const handleClose = () => {
+    setClosing(true)
+    setTimeout(() => closeWindow(id), CLOSE_DURATION)
+  }
+
   const titlebar = (
     <WindowTitlebar
       title={title}
       icon={icon}
-      onClose={() => closeWindow(id)}
+      onClose={handleClose}
       onPointerDown={handleFocus}
       hideBorder={isMobile}
     />
   )
+
+  const closeAnim = `window-close ${CLOSE_DURATION}ms ease-in forwards`
 
   // Mobile: fullscreen between topbar (44px) and bottom nav (64px + safe area)
   if (isMobile) {
@@ -70,13 +79,14 @@ export default function Window({
     const h = height - TOP_PANEL_H - GAP * 2
     return (
       <div
-        className="fixed flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl animate-[window-open_150ms_ease-out]"
+        className="fixed flex flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl"
         style={{
           zIndex: win.zIndex,
           width: w,
           height: h,
           top: TOP_PANEL_H + GAP,
           left: GAP,
+          animation: closing ? closeAnim : 'window-open 200ms ease-out both',
         }}
         onPointerDown={handleFocus}
       >
@@ -111,9 +121,11 @@ export default function Window({
       minHeight={280}
       bounds="parent"
       dragHandleClassName="rnd-drag-handle"
-      style={{ zIndex: win.zIndex }}
+      style={{
+        zIndex: win.zIndex,
+        animation: closing ? closeAnim : 'window-open 200ms ease-out both',
+      }}
       onMouseDown={handleFocus}
-      className="animate-[window-open_150ms_ease-out]"
     >
       <div className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-2xl">
         <div className="rnd-drag-handle">{titlebar}</div>

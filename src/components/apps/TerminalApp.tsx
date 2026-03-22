@@ -7,6 +7,7 @@ const OPENABLE: Record<string, AppId> = {
   inicio: 'welcome',
   'quienes-somos': 'about',
   nosotros: 'about',
+  inscripcion: 'form',
   proyectos: 'projects',
   agenda: 'calendar',
   contacto: 'contact',
@@ -22,6 +23,7 @@ export default function TerminalApp() {
   const push = useDesktopStore((s) => s.pushTerminalLine)
   const clear = useDesktopStore((s) => s.clearTerminal)
   const openWindow = useDesktopStore((s) => s.openWindow)
+  const theme = useDesktopStore((s) => s.theme)
 
   const [input, setInput] = useState('')
   const [cmdHistory, setCmdHistory] = useState<string[]>([])
@@ -43,6 +45,13 @@ export default function TerminalApp() {
     setHistIdx(-1)
 
     if (cmd === 'clear') { clear(); return }
+
+    if (cmd === 'neofetch') {
+      const lines = COMMANDS['neofetch']([theme])
+      const result = Array.isArray(lines) ? lines : [lines]
+      result.forEach((line) => push({ type: 'output', content: line }))
+      return
+    }
 
     if (cmd.startsWith('open ')) {
       const name = cmd.slice(5).trim()

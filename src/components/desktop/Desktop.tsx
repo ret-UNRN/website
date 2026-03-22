@@ -65,17 +65,21 @@ export default function Desktop() {
       <Taskbar />
 
       {/* Desktop area with icons and windows */}
-      <div className="relative flex-1 overflow-hidden">
+      <div className="desktop-grid relative flex-1 overflow-hidden">
         {/* Icon grid */}
         <div className="flex flex-wrap gap-2 p-3 pt-4 sm:flex-col sm:gap-3 sm:p-4 sm:pt-5">
-          {APPS.map((app) => (
-            <DesktopIcon
+          {APPS.map((app, i) => (
+            <div
               key={app.id}
-              label={app.label}
-              icon={app.icon}
-              isOpen={windows.some((w) => w.id === app.id)}
-              onClick={() => handleIconClick(app.id as AppId)}
-            />
+              style={{ animation: 'slide-in 180ms ease-out both', animationDelay: `${i * 40}ms` }}
+            >
+              <DesktopIcon
+                label={app.label}
+                icon={app.icon}
+                isOpen={windows.some((w) => w.id === app.id)}
+                onClick={() => handleIconClick(app.id as AppId)}
+              />
+            </div>
           ))}
         </div>
 
@@ -86,12 +90,17 @@ export default function Desktop() {
           if (!AppComponent) return null
           const icon = app?.icon ?? APPS[0].icon
 
+          const defaultSize = win.id === 'calendar'
+            ? { width: 700, height: 460 }
+            : undefined
+
           return (
             <Window
               key={win.id}
               id={win.id}
               title={APP_TITLES[win.id]}
               icon={icon}
+              defaultSize={defaultSize}
             >
               <AppComponent />
             </Window>

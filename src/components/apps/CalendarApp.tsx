@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Clock } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Clock, ExternalLink } from 'lucide-react'
 
 // ─── Agregá eventos acá ───────────────────────────────────────────────────────
 interface CalendarEvent {
@@ -31,11 +31,15 @@ const MONTHS = [
   'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
 ]
 
+const MONTHS_SHORT = [
+  'ene', 'feb', 'mar', 'abr', 'may', 'jun',
+  'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+]
+
 function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate()
 }
 
-// Monday-based: 0=Mon … 6=Sun
 function getFirstDayOffset(year: number, month: number) {
   const day = new Date(year, month, 1).getDay()
   return (day + 6) % 7
@@ -45,11 +49,18 @@ function toKey(year: number, month: number, day: number) {
   return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
 }
 
+function formatEventDate(dateKey: string) {
+  const [, m, d] = dateKey.split('-')
+  return `${parseInt(d)} ${MONTHS_SHORT[parseInt(m) - 1]}`
+}
+
 export default function CalendarApp() {
   const today = new Date()
   const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
   const [selected, setSelected] = useState<string | null>(null)
+  const [dir, setDir] = useState<'left' | 'right'>('right')
+  const [eventDir, setEventDir] = useState<'left' | 'right'>('right')
 
   const daysInMonth = getDaysInMonth(year, month)
   const offset = getFirstDayOffset(year, month)
@@ -61,13 +72,48 @@ export default function CalendarApp() {
 
   const todayKey = toKey(today.getFullYear(), today.getMonth(), today.getDate())
 
+  const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`
+  const eventsThisMonth = EVENTS.filter(e => e.date.startsWith(monthKey)).length
+
+  const upcoming = EVENTS
+    .filter(e => e.date >= todayKey)
+    .sort((a, b) => a.date.localeCompare(b.date))
+
+  const isCurrentMonth = year === today.getFullYear() && month === today.getMonth()
+
+  const goToToday = () => {
+    const newYear = today.getFullYear()
+    const newMonth = today.getMonth()
+    const d = `${newYear}-${String(newMonth + 1).padStart(2, '0')}`
+    const currentD = `${year}-${String(month + 1).padStart(2, '0')}`
+    setDir(d > currentD ? 'right' : 'left')
+    setYear(newYear)
+    setMonth(newMonth)
+    setSelected(todayKey)
+  }
+
+  const goToEvent = (dateKey: string) => {
+    const [y, m] = dateKey.split('-').map(Number)
+    const newYear = y
+    const newMonth = m - 1
+    const currentMonthNum = year * 12 + month
+    const targetMonthNum = newYear * 12 + newMonth
+    setDir(targetMonthNum >= currentMonthNum ? 'right' : 'left')
+    setYear(newYear)
+    setMonth(newMonth)
+    setEventDir(selected && dateKey > selected ? 'right' : 'left')
+    setSelected(dateKey)
+  }
+
   const prevMonth = () => {
+    setDir('left')
     if (month === 0) { setMonth(11); setYear(y => y - 1) }
     else setMonth(m => m - 1)
     setSelected(null)
   }
 
   const nextMonth = () => {
+    setDir('right')
     if (month === 11) { setMonth(0); setYear(y => y + 1) }
     else setMonth(m => m + 1)
     setSelected(null)
@@ -75,7 +121,6 @@ export default function CalendarApp() {
 
   const selectedEvents = selected ? (eventsByDate[selected] ?? []) : []
 
-  // Siempre 42 celdas (6 filas × 7 cols) — el grid nunca cambia de tamaño
   const cells = Array.from({ length: 42 }, (_, i) => {
     const day = i - offset + 1
     if (day < 1 || day > daysInMonth) return null
@@ -83,119 +128,214 @@ export default function CalendarApp() {
   })
 
   return (
-    <div className="flex h-full flex-col gap-3 px-5 py-4">
+    <div className="flex h-full overflow-hidden">
 
-      {/* Header */}
-      <div className="flex shrink-0 items-center justify-between">
-        <div className="flex items-center gap-0.5">
-          <button
-            onClick={() => { setYear(y => y - 1); setSelected(null) }}
-            className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
-            title="Año anterior"
-          >
-            <ChevronsLeft size={14} />
-          </button>
-          <button
-            onClick={prevMonth}
-            className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
-            title="Mes anterior"
-          >
-            <ChevronLeft size={14} />
-          </button>
-        </div>
+      {/* Left — calendar */}
+      <div className="flex flex-1 flex-col gap-3 overflow-auto px-5 py-5">
+        <div className="mx-auto w-full max-w-sm flex flex-col gap-3">
 
-        <span className="font-mono text-sm font-semibold text-text">
-          {MONTHS[month]} <span className="text-accent">{year}</span>
-        </span>
+          {/* Header */}
+          <div className="flex shrink-0 items-center justify-between">
+            <div className="flex items-center gap-0.5">
+              <button
+                onClick={() => { setDir('left'); setYear(y => y - 1); setSelected(null) }}
+                className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
+                title="Año anterior"
+              >
+                <ChevronsLeft size={14} />
+              </button>
+              <button
+                onClick={prevMonth}
+                className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
+                title="Mes anterior"
+              >
+                <ChevronLeft size={14} />
+              </button>
+            </div>
 
-        <div className="flex items-center gap-0.5">
-          <button
-            onClick={nextMonth}
-            className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
-            title="Mes siguiente"
-          >
-            <ChevronRight size={14} />
-          </button>
-          <button
-            onClick={() => { setYear(y => y + 1); setSelected(null) }}
-            className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
-            title="Año siguiente"
-          >
-            <ChevronsRight size={14} />
-          </button>
-        </div>
-      </div>
-
-      {/* Day headers */}
-      <div className="grid shrink-0 grid-cols-7">
-        {DAYS.map((d) => (
-          <div key={d} className="text-center font-mono text-[11px] text-muted">
-            {d}
-          </div>
-        ))}
-      </div>
-
-      {/* Day grid — siempre 6 filas exactas, sin importar el mes */}
-      <div className="grid flex-1 grid-cols-7 grid-rows-6 gap-1">
-        {cells.map((day, i) => {
-          if (!day) return <div key={`empty-${i}`} />
-          const key = toKey(year, month, day)
-          const hasEvent = !!eventsByDate[key]
-          const isToday = key === todayKey
-          const isSelected = key === selected
-
-          return (
-            <button
-              key={key}
-              onClick={() => setSelected(isSelected ? null : key)}
-              className={`flex touch-manipulation flex-col items-center justify-center rounded-lg font-mono text-sm transition-colors
-                ${isSelected
-                  ? 'bg-accent text-white'
-                  : isToday
-                  ? 'border border-accent bg-accent/10 font-semibold text-accent'
-                  : 'text-text/70 hover:bg-surface-2'
-                }`}
-            >
-              {day}
-              {hasEvent && (
-                <span
-                  className={`mt-0.5 h-1.5 w-1.5 rounded-full ring-1
-                    ${isSelected ? 'bg-white ring-white/30' : 'bg-accent ring-accent/30'}`}
-                />
-              )}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Panel de eventos — siempre visible, altura mínima fija para no mover el grid */}
-      <div className="min-h-[52px] shrink-0 rounded-lg border border-border bg-surface-2 px-4 py-3">
-        {!selected ? (
-          <p className="font-mono text-xs text-muted/40">seleccioná un día para ver eventos</p>
-        ) : selectedEvents.length === 0 ? (
-          <p className="font-mono text-xs text-muted">sin eventos este día</p>
-        ) : (
-          <div className="space-y-2">
-            {selectedEvents.map((e, i) => (
-              <div key={i} className="flex items-center gap-3">
-                {e.time && (
-                  <span className="flex shrink-0 items-center gap-1 font-mono text-xs text-accent">
-                    <Clock size={10} />
-                    {e.time}
+            <div className="flex flex-col items-center gap-0.5">
+              <span
+                key={`${year}-${month}`}
+                className="font-mono text-sm font-semibold text-text"
+                style={{ animation: `${dir === 'right' ? 'slide-in-right' : 'slide-in'} 180ms ease-out both` }}
+              >
+                {MONTHS[month]} <span className="text-accent">{year}</span>
+              </span>
+              <div className="flex items-center gap-2">
+                {eventsThisMonth > 0 && (
+                  <span className="font-mono text-[0.65rem] text-muted">
+                    {eventsThisMonth} evento{eventsThisMonth !== 1 ? 's' : ''}
                   </span>
                 )}
-                <span className="flex-1 font-mono text-xs text-text">{e.title}</span>
-                {e.url && (
-                  <a
-                    href={e.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="shrink-0 rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted transition-colors hover:border-accent hover:text-accent"
+                {!isCurrentMonth && (
+                  <button
+                    onClick={goToToday}
+                    className="font-mono text-[0.65rem] text-accent hover:underline"
                   >
-                    + info
-                  </a>
+                    hoy
+                  </button>
                 )}
               </div>
+            </div>
+
+            <div className="flex items-center gap-0.5">
+              <button
+                onClick={nextMonth}
+                className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
+                title="Mes siguiente"
+              >
+                <ChevronRight size={14} />
+              </button>
+              <button
+                onClick={() => { setDir('right'); setYear(y => y + 1); setSelected(null) }}
+                className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
+                title="Año siguiente"
+              >
+                <ChevronsRight size={14} />
+              </button>
+            </div>
+          </div>
+
+          {/* Day headers */}
+          <div className="grid shrink-0 grid-cols-7">
+            {DAYS.map((d, i) => (
+              <div
+                key={d}
+                className={`text-center font-mono text-xs ${i >= 5 ? 'text-muted/50' : 'text-muted'}`}
+              >
+                {d}
+              </div>
+            ))}
+          </div>
+
+          {/* Day grid */}
+          <div
+            key={`${year}-${month}`}
+            className="grid grid-cols-7 gap-1"
+            style={{ animation: `${dir === 'right' ? 'slide-in-right' : 'slide-in'} 180ms ease-out both` }}
+          >
+            {cells.map((day, i) => {
+              if (!day) return <div key={`empty-${i}`} />
+              const key = toKey(year, month, day)
+              const hasEvent = !!eventsByDate[key]
+              const isToday = key === todayKey
+              const isSelected = key === selected
+              const isWeekend = (i % 7) >= 5
+
+              return (
+                <button
+                  key={key}
+                  onClick={() => {
+                    if (!isSelected) {
+                      setEventDir(selected && key > selected ? 'right' : 'left')
+                      setSelected(key)
+                    } else {
+                      setSelected(null)
+                    }
+                  }}
+                  className={`aspect-square flex touch-manipulation flex-col items-center justify-center rounded-lg font-mono text-sm transition-colors
+                    ${isSelected
+                      ? 'bg-accent text-white'
+                      : isToday
+                      ? 'border border-accent bg-accent/10 font-semibold text-accent'
+                      : isWeekend
+                      ? 'text-text/40 hover:bg-surface-2'
+                      : 'text-text/70 hover:bg-surface-2'
+                    }`}
+                >
+                  {day}
+                  {hasEvent && (
+                    <span
+                      className={`mt-0.5 h-1.5 w-1.5 rounded-full ring-1
+                        ${isSelected ? 'bg-white ring-white/30' : 'bg-accent ring-accent/30'}`}
+                    />
+                  )}
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Panel de eventos del día seleccionado */}
+          <div className="shrink-0 min-h-[4.5rem]">
+            {selected && (
+              <div
+                key={selected}
+                className="rounded-lg border border-border bg-surface-2 px-4 py-3"
+                style={{ animation: `${eventDir === 'right' ? 'slide-in-right' : 'slide-in'} 200ms ease-out both` }}
+              >
+                {selectedEvents.length === 0 ? (
+                  <p className="font-mono text-xs text-muted">sin eventos este día</p>
+                ) : (
+                  <div className="space-y-2">
+                    {selectedEvents.map((e, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        {e.time && (
+                          <span className="flex shrink-0 items-center gap-1 font-mono text-xs text-accent">
+                            <Clock size={10} />
+                            {e.time}
+                          </span>
+                        )}
+                        <span className="flex-1 font-mono text-xs text-text">{e.title}</span>
+                        {e.url && (
+                          <a
+                            href={e.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="shrink-0 rounded border border-border px-2 py-0.5 font-mono text-[0.7rem] text-muted transition-colors hover:border-accent hover:text-accent"
+                          >
+                            + info
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+        </div>
+      </div>
+
+      {/* Right — upcoming events */}
+      <div className="hidden sm:flex w-64 shrink-0 flex-col gap-4 border-l border-border px-4 py-5 overflow-auto">
+        <p className="font-mono text-xs text-accent shrink-0"># próximos eventos</p>
+        {upcoming.length === 0 ? (
+          <p className="font-mono text-xs text-muted">sin eventos próximos</p>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {upcoming.map((e, i) => (
+              <button
+                key={i}
+                onClick={() => goToEvent(e.date)}
+                className={`flex flex-col gap-1 text-left transition-opacity hover:opacity-100 ${selected === e.date ? 'opacity-100' : 'opacity-60'}`}
+                style={{ animation: 'slide-in 200ms ease-out both', animationDelay: `${i * 50}ms` }}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[0.7rem] text-accent">{formatEventDate(e.date)}</span>
+                  {e.time && (
+                    <span className="flex items-center gap-1 font-mono text-[0.7rem] text-muted">
+                      <Clock size={9} />
+                      {e.time}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-mono text-xs leading-snug text-text/80">{e.title}</p>
+                  {e.url && (
+                    <a
+                      href={e.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={ev => ev.stopPropagation()}
+                      className="shrink-0 text-muted transition-colors hover:text-accent"
+                    >
+                      <ExternalLink size={10} />
+                    </a>
+                  )}
+                </div>
+                {i < upcoming.length - 1 && <div className="mt-1 border-b border-border" />}
+              </button>
             ))}
           </div>
         )}

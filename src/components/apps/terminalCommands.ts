@@ -36,6 +36,7 @@ export const COMMANDS: Record<string, (args: string[]) => string | string[]> = {
     '  ping <host>   ping con latencia real™',
     '  fortune       sabiduría aleatoria',
     '  neofetch      info del sistema estilo neofetch',
+    '  cowsay <msg>  lo que dice la vaca',
     '  coffee        cafeína',
     '  sudo rm -rf / no lo intentes',
     '  clear         limpia la terminal',
@@ -57,7 +58,7 @@ export const COMMANDS: Record<string, (args: string[]) => string | string[]> = {
   ],
 
   ls: () => [
-    'inicio  quienes-somos  proyectos  agenda  contacto  terminal',
+    'inicio  quienes-somos  inscripcion  proyectos  agenda  contacto  terminal',
   ],
 
   'uname -a': () =>
@@ -92,7 +93,7 @@ export const COMMANDS: Record<string, (args: string[]) => string | string[]> = {
 
   fortune: () => QUOTES[Math.floor(Math.random() * QUOTES.length)],
 
-  neofetch: () => [
+  neofetch: (args) => [
     '  user@retunrn',
     '  ────────────',
     '  OS      retUNRN OS 2026.1 Bariloche',
@@ -101,7 +102,7 @@ export const COMMANDS: Record<string, (args: string[]) => string | string[]> = {
     '  Lang    C++, Python, JavaScript',
     '  Members 6 coordinadores activos',
     '  Shell   retsh v1.0',
-    '  Theme   Dark (siempre)',
+    `  Theme   ${args[0] === 'light' ? 'Light' : 'Dark'}`,
   ],
 
   coffee: () => [

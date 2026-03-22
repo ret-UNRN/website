@@ -17,8 +17,7 @@ const TEAM = [
 ]
 
 const LINKS = [
-  { label: 'github.com/retunrn', href: 'https://github.com/retunrn' },
-  { label: 'retunrn.org', href: 'https://www.retunrn.org' },
+  { label: 'github.com/ret-unrn', href: 'https://github.com/ret-unrn' },
 ]
 
 export default function AboutApp() {
@@ -27,7 +26,7 @@ export default function AboutApp() {
       <div className="mx-auto max-w-2xl space-y-8">
 
         {/* Header */}
-        <div>
+        <div style={{ animation: 'slide-in 220ms ease-out both', animationDelay: '0ms' }}>
           <h2 className="font-mono text-2xl font-bold text-text">
             Club de Programación
             <span className="text-accent"> retUNRN</span>
@@ -38,7 +37,7 @@ export default function AboutApp() {
         </div>
 
         {/* Descripción */}
-        <div>
+        <div style={{ animation: 'slide-in 220ms ease-out both', animationDelay: '80ms' }}>
           <p className="mb-2 font-mono text-xs text-accent"># Descripción</p>
           <div className="border-l-2 border-accent pl-4">
             <p className="font-mono text-sm leading-relaxed text-text/80">
@@ -53,7 +52,7 @@ export default function AboutApp() {
         </div>
 
         {/* Misión */}
-        <div>
+        <div style={{ animation: 'slide-in 220ms ease-out both', animationDelay: '160ms' }}>
           <p className="mb-3 font-mono text-xs text-accent"># Misión</p>
           <div className="space-y-2">
             {MISSION_ITEMS.map((item, i) => (
@@ -68,7 +67,7 @@ export default function AboutApp() {
         </div>
 
         {/* Equipo */}
-        <div>
+        <div style={{ animation: 'slide-in 220ms ease-out both', animationDelay: '240ms' }}>
           <p className="mb-3 font-mono text-xs text-accent"># Equipo</p>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {TEAM.map((member) => (
@@ -84,7 +83,7 @@ export default function AboutApp() {
         </div>
 
         {/* Links */}
-        <div>
+        <div style={{ animation: 'slide-in 220ms ease-out both', animationDelay: '320ms' }}>
           <p className="mb-3 font-mono text-xs text-accent"># Links</p>
           <div className="space-y-2">
             {LINKS.map((link) => (

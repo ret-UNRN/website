@@ -18,7 +18,7 @@ export default function WindowTitlebar({
 }: WindowTitlebarProps) {
   return (
     <div
-      className={`flex h-10 items-center bg-surface-2 px-4 select-none ${hideBorder ? '' : 'border-b border-border'}`}
+      className={`flex h-9 items-center bg-surface-2 px-4 select-none ${hideBorder ? '' : 'border-b border-border'}`}
       onPointerDown={onPointerDown}
     >
       {/* Left: icon + title */}
@@ -33,7 +33,7 @@ export default function WindowTitlebar({
           e.stopPropagation()
           onClose()
         }}
-        className="group relative -mr-2 ml-2 flex h-10 w-10 shrink-0 touch-manipulation items-center justify-center"
+        className="group relative -mr-4 ml-2 flex h-10 w-10 shrink-0 touch-manipulation items-center justify-center"
         aria-label="Cerrar"
       >
         <span className="flex h-[14px] w-[14px] items-center justify-center rounded-full bg-border transition-colors group-hover:bg-accent">
