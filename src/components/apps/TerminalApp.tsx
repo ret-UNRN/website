@@ -3,8 +3,6 @@ import { useDesktopStore } from '../../store/useDesktopStore'
 import { COMMANDS } from './terminalCommands'
 import type { AppId } from '../../store/useDesktopStore'
 
-const PROMPT = 'user@retunrn:~$'
-
 const OPENABLE: Record<string, AppId> = {
   inicio: 'welcome',
   'quienes-somos': 'about',
@@ -13,6 +11,10 @@ const OPENABLE: Record<string, AppId> = {
   agenda: 'calendar',
   contacto: 'contact',
   terminal: 'terminal',
+}
+
+function Prompt() {
+  return <span className="shrink-0 text-green">user@retunrn:~$</span>
 }
 
 export default function TerminalApp() {
@@ -93,13 +95,12 @@ export default function TerminalApp() {
       className="flex h-full flex-col bg-surface-2 px-4 py-3 font-mono text-sm transition-colors"
       onClick={() => inputRef.current?.focus()}
     >
-      {/* Single scrollable area — prompt follows output naturally */}
       <div className="flex-1 overflow-auto">
         {history.map((line, i) => (
           <div key={i} className="leading-relaxed whitespace-pre-wrap">
             {line.type === 'input' ? (
               <span>
-                <span className="text-green">{PROMPT}</span>
+                <Prompt />
                 <span className="text-text"> {line.content}</span>
               </span>
             ) : line.type === 'error' ? (
@@ -110,9 +111,9 @@ export default function TerminalApp() {
           </div>
         ))}
 
-        {/* Input row — sits right after last output */}
+        {/* Input row */}
         <div className="flex items-center gap-2 pt-0.5">
-          <span className="shrink-0 text-green">{PROMPT}</span>
+          <Prompt />
           <div className="relative flex-1 overflow-hidden">
             <span className="invisible whitespace-pre leading-relaxed">{input || ' '}</span>
             <div className="absolute inset-0 flex items-center">
@@ -126,7 +127,10 @@ export default function TerminalApp() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
-              onFocus={() => setFocused(true)}
+              onFocus={() => {
+                setFocused(true)
+                inputRef.current?.scrollIntoView({ behavior: 'smooth' })
+              }}
               onBlur={() => setFocused(false)}
               autoFocus
               spellCheck={false}

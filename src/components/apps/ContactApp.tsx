@@ -31,16 +31,19 @@ export default function ContactApp() {
 
   if (status === 'sent') {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-2">
-        <p className="font-mono text-sm text-green">mensaje enviado</p>
-        <p className="font-mono text-xs text-muted">
-          te respondemos a la brevedad desde info@retunrn.org
+      <div className="flex h-full flex-col items-center justify-center gap-3 px-6">
+        <p className="font-mono text-lg text-green">mensaje enviado</p>
+        <p className="font-mono text-xs text-muted text-center">
+          te respondemos a la brevedad<br />desde info@retunrn.org
         </p>
+        <div className="rounded border border-border px-3 py-1.5 font-mono text-xs text-muted">
+          $ sent → OK (200)
+        </div>
         <button
           onClick={() => setStatus('idle')}
-          className="mt-3 font-mono text-xs text-accent hover:underline"
+          className="mt-1 font-mono text-xs text-accent hover:underline"
         >
-          enviar otro
+          enviar otro mensaje
         </button>
       </div>
     )
@@ -58,41 +61,41 @@ export default function ContactApp() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label className="font-mono text-xs text-muted">nombre</label>
+            <label className="font-mono text-xs font-medium text-text/60">nombre</label>
             <input
               name="nombre"
               type="text"
               required
               placeholder="tu nombre"
-              className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-sm text-text placeholder-muted/50 outline-none focus:border-accent transition-colors"
+              className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-sm text-text placeholder-muted/50 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/30"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="font-mono text-xs text-muted">email</label>
+            <label className="font-mono text-xs font-medium text-text/60">email</label>
             <input
               name="email"
               type="email"
               required
               placeholder="tu@email.com"
-              className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-sm text-text placeholder-muted/50 outline-none focus:border-accent transition-colors"
+              className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-sm text-text placeholder-muted/50 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/30"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="font-mono text-xs text-muted">mensaje</label>
+            <label className="font-mono text-xs font-medium text-text/60">mensaje</label>
             <textarea
               name="mensaje"
               required
               rows={5}
               placeholder="¿en qué podemos ayudarte?"
-              className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-sm text-text placeholder-muted/50 outline-none focus:border-accent transition-colors"
+              className="w-full resize-none rounded-lg border border-border bg-surface-2 px-3 py-2 font-mono text-sm text-text placeholder-muted/50 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/30"
             />
           </div>
 
           {status === 'error' && (
             <p className="font-mono text-xs text-accent">
-              error al enviar — intentá de nuevo
+              Error: connection refused — intentá de nuevo
             </p>
           )}
 
@@ -101,7 +104,11 @@ export default function ContactApp() {
             disabled={status === 'sending'}
             className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 font-mono text-sm text-white transition-colors hover:bg-accent-h disabled:opacity-50"
           >
-            <Send size={14} />
+            {status === 'sending' ? (
+              <span className="h-3 w-3 animate-spin rounded-full border border-white border-t-transparent" />
+            ) : (
+              <Send size={14} />
+            )}
             {status === 'sending' ? 'enviando...' : 'enviar'}
           </button>
         </form>

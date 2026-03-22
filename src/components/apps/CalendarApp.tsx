@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Clock } from 'lucide-react'
 
 // ─── Agregá eventos acá ───────────────────────────────────────────────────────
 interface CalendarEvent {
-  date: string  // formato YYYY-MM-DD
+  date: string   // formato YYYY-MM-DD
   title: string
-  time?: string // opcional, ej: "18:00"
-  url?: string  // opcional, link a más info
+  time?: string  // opcional, ej: "18:00"
+  url?: string   // opcional, link a más info
 }
 
 const EVENTS: CalendarEvent[] = [
@@ -15,6 +15,11 @@ const EVENTS: CalendarEvent[] = [
     title: 'Reunión de bienvenida al club',
     time: '18:00',
     url: 'https://www.retunrn.org',
+  },
+  {
+    date: '2026-03-21',
+    title: 'Taller de programación competitiva',
+    time: '19:30',
   },
 ]
 // ─────────────────────────────────────────────────────────────────────────────
@@ -70,22 +75,32 @@ export default function CalendarApp() {
 
   const selectedEvents = selected ? (eventsByDate[selected] ?? []) : []
 
-  const cells = Array.from({ length: offset + daysInMonth }, (_, i) => {
-    if (i < offset) return null
-    return i - offset + 1
+  // Siempre 42 celdas (6 filas × 7 cols) — el grid nunca cambia de tamaño
+  const cells = Array.from({ length: 42 }, (_, i) => {
+    const day = i - offset + 1
+    if (day < 1 || day > daysInMonth) return null
+    return day
   })
 
   return (
-    <div className="flex h-full flex-col gap-4 px-6 py-5">
+    <div className="flex h-full flex-col gap-3 px-5 py-4">
 
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <button onClick={() => { setYear(y => y - 1); setSelected(null) }} className="rounded px-1 py-1 font-mono text-xs text-muted transition-colors hover:text-text" title="Año anterior">
-            «
+      <div className="flex shrink-0 items-center justify-between">
+        <div className="flex items-center gap-0.5">
+          <button
+            onClick={() => { setYear(y => y - 1); setSelected(null) }}
+            className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
+            title="Año anterior"
+          >
+            <ChevronsLeft size={14} />
           </button>
-          <button onClick={prevMonth} className="rounded p-1 text-muted transition-colors hover:text-text" title="Mes anterior">
-            <ChevronLeft size={16} />
+          <button
+            onClick={prevMonth}
+            className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
+            title="Mes anterior"
+          >
+            <ChevronLeft size={14} />
           </button>
         </div>
 
@@ -93,26 +108,34 @@ export default function CalendarApp() {
           {MONTHS[month]} <span className="text-accent">{year}</span>
         </span>
 
-        <div className="flex items-center">
-          <button onClick={nextMonth} className="rounded p-1 text-muted transition-colors hover:text-text" title="Mes siguiente">
-            <ChevronRight size={16} />
+        <div className="flex items-center gap-0.5">
+          <button
+            onClick={nextMonth}
+            className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
+            title="Mes siguiente"
+          >
+            <ChevronRight size={14} />
           </button>
-          <button onClick={() => { setYear(y => y + 1); setSelected(null) }} className="rounded px-1 py-1 font-mono text-xs text-muted transition-colors hover:text-text" title="Año siguiente">
-            »
+          <button
+            onClick={() => { setYear(y => y + 1); setSelected(null) }}
+            className="flex h-7 w-7 touch-manipulation items-center justify-center rounded text-muted transition-colors hover:text-text"
+            title="Año siguiente"
+          >
+            <ChevronsRight size={14} />
           </button>
         </div>
       </div>
 
       {/* Day headers */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid shrink-0 grid-cols-7">
         {DAYS.map((d) => (
-          <div key={d} className="text-center font-mono text-xs text-muted">
+          <div key={d} className="text-center font-mono text-[11px] text-muted">
             {d}
           </div>
         ))}
       </div>
 
-      {/* Day grid — grows to fill space */}
+      {/* Day grid — siempre 6 filas exactas, sin importar el mes */}
       <div className="grid flex-1 grid-cols-7 grid-rows-6 gap-1">
         {cells.map((day, i) => {
           if (!day) return <div key={`empty-${i}`} />
@@ -125,47 +148,58 @@ export default function CalendarApp() {
             <button
               key={key}
               onClick={() => setSelected(isSelected ? null : key)}
-              className={`flex flex-col items-center justify-center rounded-lg font-mono text-sm transition-colors
-                ${isSelected ? 'bg-accent text-white' : isToday ? 'border border-accent text-accent' : 'text-text/70 hover:bg-surface-2'}`}
+              className={`flex touch-manipulation flex-col items-center justify-center rounded-lg font-mono text-sm transition-colors
+                ${isSelected
+                  ? 'bg-accent text-white'
+                  : isToday
+                  ? 'border border-accent bg-accent/10 font-semibold text-accent'
+                  : 'text-text/70 hover:bg-surface-2'
+                }`}
             >
               {day}
               {hasEvent && (
-                <span className={`mt-1 h-1 w-1 rounded-full ${isSelected ? 'bg-white' : 'bg-accent'}`} />
+                <span
+                  className={`mt-0.5 h-1.5 w-1.5 rounded-full ring-1
+                    ${isSelected ? 'bg-white ring-white/30' : 'bg-accent ring-accent/30'}`}
+                />
               )}
             </button>
           )
         })}
       </div>
 
-      {/* Events for selected day */}
-      {selected && (
-        <div className="shrink-0 border-t border-border pt-3">
-          {selectedEvents.length === 0 ? (
-            <p className="font-mono text-xs text-muted">sin eventos este día</p>
-          ) : (
-            <div className="space-y-2">
-              {selectedEvents.map((e, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  {e.time && (
-                    <span className="shrink-0 font-mono text-xs text-accent">{e.time}</span>
-                  )}
-                  <span className="flex-1 font-mono text-xs text-text">{e.title}</span>
-                  {e.url && (
-                    <a
-                      href={e.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="shrink-0 rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted transition-colors hover:border-accent hover:text-accent"
-                    >
-                      + info
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      {/* Panel de eventos — siempre visible, altura mínima fija para no mover el grid */}
+      <div className="min-h-[52px] shrink-0 rounded-lg border border-border bg-surface-2 px-4 py-3">
+        {!selected ? (
+          <p className="font-mono text-xs text-muted/40">seleccioná un día para ver eventos</p>
+        ) : selectedEvents.length === 0 ? (
+          <p className="font-mono text-xs text-muted">sin eventos este día</p>
+        ) : (
+          <div className="space-y-2">
+            {selectedEvents.map((e, i) => (
+              <div key={i} className="flex items-center gap-3">
+                {e.time && (
+                  <span className="flex shrink-0 items-center gap-1 font-mono text-xs text-accent">
+                    <Clock size={10} />
+                    {e.time}
+                  </span>
+                )}
+                <span className="flex-1 font-mono text-xs text-text">{e.title}</span>
+                {e.url && (
+                  <a
+                    href={e.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted transition-colors hover:border-accent hover:text-accent"
+                  >
+                    + info
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
     </div>
   )

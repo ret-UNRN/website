@@ -43,7 +43,7 @@ export default function WelcomeApp() {
         </p>
 
         {/* Stats */}
-        <div className="flex flex-col gap-3">
+        <div className="rounded-lg border border-border bg-surface-2 px-4 py-3 flex flex-col gap-3">
           {STATS.map((stat) => (
             <div
               key={stat.label}
@@ -52,16 +52,16 @@ export default function WelcomeApp() {
               <span className="w-[85px] shrink-0 text-muted">
                 {stat.label}
               </span>
-              <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-sm bg-surface-2">
+              <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-sm bg-bg">
                 <div
-                  className="h-full rounded-sm bg-accent transition-[width] duration-1000 ease-out"
+                  className="h-full rounded-sm bg-gradient-to-r from-accent to-accent-h transition-[width] duration-1000 ease-out"
                   style={{
                     width: mounted ? `${stat.width}%` : '0%',
                     transitionDelay: '300ms',
                   }}
                 />
               </div>
-              <span className="w-[90px] shrink-0 whitespace-nowrap text-right text-text">
+              <span className="w-[90px] shrink-0 whitespace-nowrap text-right font-semibold text-accent">
                 {stat.value}
               </span>
             </div>
@@ -69,16 +69,16 @@ export default function WelcomeApp() {
         </div>
 
         {/* Actions */}
-        <div className="mt-7 flex gap-3">
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
           <button
             onClick={() => openWindow('about')}
-            className="rounded border border-border px-5 py-2.5 font-mono text-sm text-muted transition-colors hover:border-muted hover:text-text"
+            className="rounded border border-border px-5 py-2.5 font-mono text-sm text-muted transition-colors hover:border-muted hover:text-text sm:w-auto"
           >
             Conoc&eacute; el club
           </button>
           <button
             onClick={() => openWindow('form')}
-            className="rounded bg-accent px-5 py-2.5 font-mono text-sm text-white transition-colors hover:bg-accent-h"
+            className="rounded bg-accent px-5 py-2.5 font-mono text-sm text-white transition-colors hover:bg-accent-h sm:w-auto"
           >
             Quiero ser parte
           </button>
