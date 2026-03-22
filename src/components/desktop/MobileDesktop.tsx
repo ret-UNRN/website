@@ -78,7 +78,7 @@ export default function MobileDesktop() {
     <div className="desktop-grid fixed inset-0">
       {/* Status bar */}
       <div className="fixed inset-x-0 top-0 z-50 flex h-11 items-center border-b border-border bg-surface px-4 font-mono text-xs transition-colors">
-        <span className="text-muted">
+        <span className="text-text">
           ret<span className="font-bold text-accent">UNRN</span>
           <span className="ml-1 text-muted/50">OS</span>
         </span>

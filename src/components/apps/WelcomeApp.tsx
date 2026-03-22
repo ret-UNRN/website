@@ -30,8 +30,8 @@ export default function WelcomeApp() {
           <br />
           Programaci&oacute;n
         </h1>
-        <div className="font-mono text-3xl font-bold leading-tight text-accent" style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '150ms' }}>
-          retUNRN
+        <div className="font-mono text-3xl font-bold leading-tight text-text" style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '150ms' }}>
+          ret<span className="text-accent">UNRN</span>
         </div>
 
         {/* Prompt */}

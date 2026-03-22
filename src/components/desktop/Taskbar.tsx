@@ -8,7 +8,7 @@ export default function Taskbar() {
     <div className="flex h-8 shrink-0 items-center bg-surface px-4 font-mono text-xs backdrop-blur-sm transition-colors">
       {/* Left: retUNRN brand */}
       <div className="flex flex-1 items-center">
-        <span className="text-xs text-muted">
+        <span className="text-xs text-text">
           ret<span className="font-bold text-accent">UNRN</span>
           <span className="ml-1.5 text-muted/50">OS</span>
         </span>

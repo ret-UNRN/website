@@ -90,17 +90,12 @@ export default function Desktop() {
           if (!AppComponent) return null
           const icon = app?.icon ?? APPS[0].icon
 
-          const defaultSize = win.id === 'calendar'
-            ? { width: 700, height: 460 }
-            : undefined
-
           return (
             <Window
               key={win.id}
               id={win.id}
               title={APP_TITLES[win.id]}
               icon={icon}
-              defaultSize={defaultSize}
             >
               <AppComponent />
             </Window>
