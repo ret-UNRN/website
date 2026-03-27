@@ -8,7 +8,7 @@ import type { AppId } from '../../store/useDesktopStore'
 
 const TOP_PANEL_H = 32
 const GAP = 8
-const ICONS_COL_W = 140
+const ICONS_COL_W = 90
 const CASCADE_STEP = 14
 const CLOSE_DURATION = 180
 
@@ -30,6 +30,7 @@ export default function Window({
   defaultSize,
 }: WindowProps) {
   const closeWindow = useDesktopStore((s) => s.closeWindow)
+  const minimizeWindow = useDesktopStore((s) => s.minimizeWindow)
   const focusWindow = useDesktopStore((s) => s.focusWindow)
   const win = useDesktopStore((s) => s.windows.find((w) => w.id === id))
   const winIndex = useDesktopStore((s) => s.windows.findIndex((w) => w.id === id))
@@ -38,6 +39,7 @@ export default function Window({
   const { isMobile, isTablet, width, height } = useWindowSize()
   const rndRef = useRef<Rnd>(null)
   const [closing, setClosing] = useState(false)
+  const [maximized, setMaximized] = useState(false)
 
   if (!win || win.minimized) return null
 
@@ -48,11 +50,17 @@ export default function Window({
     setTimeout(() => closeWindow(id), CLOSE_DURATION)
   }
 
+  const handleMinimize = () => minimizeWindow(id)
+  const handleMaximize = () => setMaximized((m) => !m)
+
   const titlebar = (
     <WindowTitlebar
       title={title}
       icon={icon}
       onClose={handleClose}
+      onMinimize={handleMinimize}
+      onMaximize={handleMaximize}
+      maximized={maximized}
       onPointerDown={handleFocus}
       hideBorder={isMobile}
     />
@@ -96,17 +104,37 @@ export default function Window({
     )
   }
 
-  // Desktop: react-rnd — cascade from base position using window index
+  // Desktop maximized: fills the entire window area
+  if (maximized) {
+    return (
+      <div
+        className="absolute inset-0 flex flex-col overflow-hidden border border-border bg-surface shadow-2xl"
+        style={{ zIndex: win.zIndex }}
+        onPointerDown={handleFocus}
+      >
+        <div>{titlebar}</div>
+        <div className="min-w-0 flex-1 overflow-auto">{children}</div>
+      </div>
+    )
+  }
+
+  // Desktop: react-rnd
+  // The window area div is already positioned below the taskbar and right of the icon
+  // sidebar (flex layout), so coordinates start at (0,0) within that div.
+  const availW = width - ICONS_COL_W
   const availH = height - TOP_PANEL_H
-  const topGap = GAP + TOP_PANEL_H
-  const areaLeft = ICONS_COL_W
-  const areaW = width - areaLeft
   const cascade = winIndex * CASCADE_STEP
-  const defW = defaultSize?.width ?? (areaW - GAP * 2) * 0.9
-  const defH = defaultSize?.height ?? (availH - topGap - GAP) * 0.9
-  const centerX = areaLeft + areaW / 2
-  const defX = defaultPosition?.x ?? centerX - defW / 2 + cascade
-  const defY = defaultPosition?.y ?? topGap + GAP + cascade
+
+  const defW = defaultSize?.width ?? (availW - GAP * 2) * 0.85
+  const defH = defaultSize?.height ?? (availH - GAP * 2) * 0.85
+
+  // Center first window; cascade subsequent ones; clamp so nothing goes off-screen
+  const centeredX = (availW - defW) / 2
+  const centeredY = (availH - defH) / 2
+  const defX = defaultPosition?.x
+    ?? Math.max(GAP, Math.min(centeredX + cascade, availW - defW - GAP))
+  const defY = defaultPosition?.y
+    ?? Math.max(GAP, Math.min(centeredY + cascade, availH - defH - GAP))
 
   return (
     <Rnd

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { useDesktopStore } from '../../store/useDesktopStore'
+import { useWindowSize } from '../../hooks/useWindowSize'
 import { COMMANDS } from './terminalCommands'
 import type { AppId } from '../../store/useDesktopStore'
 
@@ -14,8 +15,8 @@ const OPENABLE: Record<string, AppId> = {
   terminal: 'terminal',
 }
 
-function Prompt() {
-  return <span className="shrink-0 text-green">user@retunrn:~$</span>
+function Prompt({ isMobile }: { isMobile: boolean }) {
+  return <span className={`shrink-0 text-green ${isMobile ? 'text-xs' : 'text-sm'}`}>user@retunrn:~$</span>
 }
 
 export default function TerminalApp() {
@@ -24,17 +25,19 @@ export default function TerminalApp() {
   const clear = useDesktopStore((s) => s.clearTerminal)
   const openWindow = useDesktopStore((s) => s.openWindow)
   const theme = useDesktopStore((s) => s.theme)
+  const { isMobile } = useWindowSize()
 
   const [input, setInput] = useState('')
   const [cmdHistory, setCmdHistory] = useState<string[]>([])
   const [histIdx, setHistIdx] = useState(-1)
   const [focused, setFocused] = useState(true)
 
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const el = scrollRef.current
+    if (el) el.scrollTop = el.scrollHeight
   }, [history])
 
   const run = (raw: string) => {
@@ -99,17 +102,20 @@ export default function TerminalApp() {
     }
   }
 
+  const fontSize = isMobile ? 'text-xs' : 'text-sm'
+  const padding = isMobile ? 'px-3 py-2' : 'px-4 py-3'
+
   return (
     <div
-      className="flex h-full flex-col bg-surface-2 px-4 py-3 font-mono text-sm transition-colors"
+      className={`flex h-full flex-col bg-surface-2 ${padding} font-mono ${fontSize} transition-colors`}
       onClick={() => inputRef.current?.focus()}
     >
-      <div className="flex-1 overflow-auto">
+      <div ref={scrollRef} className="flex-1 overflow-auto">
         {history.map((line, i) => (
           <div key={i} className="leading-relaxed whitespace-pre-wrap">
             {line.type === 'input' ? (
               <span>
-                <Prompt />
+                <Prompt isMobile={isMobile} />
                 <span className="text-text"> {line.content}</span>
               </span>
             ) : line.type === 'error' ? (
@@ -122,7 +128,7 @@ export default function TerminalApp() {
 
         {/* Input row */}
         <div className="flex items-center gap-2 pt-0.5">
-          <Prompt />
+          <Prompt isMobile={isMobile} />
           <div className="relative flex-1 overflow-hidden">
             <span className="invisible whitespace-pre leading-relaxed">{input || ' '}</span>
             <div className="absolute inset-0 flex items-center">
@@ -136,10 +142,7 @@ export default function TerminalApp() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
-              onFocus={() => {
-                setFocused(true)
-                inputRef.current?.scrollIntoView({ behavior: 'smooth' })
-              }}
+              onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               autoFocus
               spellCheck={false}
@@ -148,7 +151,6 @@ export default function TerminalApp() {
           </div>
         </div>
 
-        <div ref={bottomRef} />
       </div>
     </div>
   )

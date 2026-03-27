@@ -22,7 +22,7 @@ export default function Taskbar() {
       {/* Right: System indicators */}
       <div className="flex items-center gap-1">
         <a
-          href="https://discord.gg/PENDIENTE"
+          href="https://discord.gg/eFwypv6w"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center rounded p-1 text-muted transition-colors hover:text-text"

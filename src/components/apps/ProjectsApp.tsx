@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ExternalLink } from 'lucide-react'
+import { useWindowSize } from '../../hooks/useWindowSize'
 
 // ── Agregá proyectos acá ─────────────────────────────────────────────────────
 interface Repo {
@@ -46,7 +47,7 @@ const LANG_COLORS: Record<string, string> = {
   JavaScript: 'text-yellow-300 border-yellow-300/30',
   Go:         'text-cyan-300 border-cyan-300/30',
   Rust:       'text-orange-400 border-orange-400/30',
-  Java:       'text-red-400 border-red-400/30',
+  Java:       'text-accent border-accent/30',
   Shell:      'text-green border-green/30',
 }
 
@@ -59,6 +60,7 @@ const LOADING_LINES = [
 export default function ProjectsApp() {
   const [ready, setReady] = useState(false)
   const [visibleLines, setVisibleLines] = useState(0)
+  const { isMobile } = useWindowSize()
 
   useEffect(() => {
     let i = 0
@@ -76,8 +78,10 @@ export default function ProjectsApp() {
   }, [])
 
   if (!ready) {
+    const padding = isMobile ? 'px-4 py-4' : 'px-6 py-6'
+    const fontSize = isMobile ? 'text-[0.7rem]' : 'text-xs'
     return (
-      <div className="flex h-full flex-col justify-center px-6 py-6 font-mono text-xs">
+      <div className={`flex h-full flex-col justify-center ${padding} font-mono ${fontSize}`}>
         {LOADING_LINES.slice(0, visibleLines).map((line, i) => (
           <p
             key={i}
@@ -94,44 +98,52 @@ export default function ProjectsApp() {
     )
   }
 
+  const padding = isMobile ? 'px-4 py-4' : 'px-6 py-6'
+  const headerText = isMobile ? 'text-[0.7rem]' : 'text-xs'
+  const repoName = isMobile ? 'text-xs' : 'text-sm'
+  const repoDesc = isMobile ? 'text-[0.65rem]' : 'text-xs'
+  const langTag = isMobile ? 'text-[0.6rem]' : 'text-[0.7rem]'
+  const cardGap = isMobile ? 'gap-2' : 'gap-3'
+  const cardPadding = isMobile ? 'p-3' : 'p-4'
+
   return (
-    <div className="h-full overflow-auto px-6 py-6">
+    <div className={`h-full overflow-auto ${padding}`}>
       {/* Header */}
-      <div className="mb-4 flex items-center justify-between">
-        <span className="font-mono text-xs text-muted">$ ls ~/proyectos/</span>
+      <div className={`mb-3 flex flex-col items-start justify-between gap-2 sm:mb-4 sm:flex-row sm:items-center sm:gap-3`}>
+        <span className={`font-mono ${headerText} text-muted`}>$ ls ~/proyectos/</span>
         <a
           href="https://github.com/ret-unrn"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 font-mono text-xs text-accent hover:underline"
+          className={`flex items-center gap-1 font-mono ${headerText} text-accent hover:underline`}
         >
-          <ExternalLink size={10} />
+          <ExternalLink size={isMobile ? 10 : 12} />
           github.com/ret-unrn
         </a>
       </div>
 
       {/* Repos */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className={`grid grid-cols-1 ${cardGap} sm:grid-cols-2`}>
         {REPOS.map((repo, i) => (
           <a
             key={repo.name}
             href={repo.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group rounded-lg border border-border bg-surface-2 p-4 transition-colors hover:border-accent/40"
+            className={`group rounded-lg border border-border bg-surface-2 transition-colors hover:border-accent/40 ${cardPadding}`}
             style={{ animation: 'slide-in 200ms ease-out both', animationDelay: `${i * 60}ms` }}
           >
-            <p className="font-mono text-sm font-semibold text-green group-hover:underline">
+            <p className={`font-mono font-semibold text-green group-hover:underline ${repoName}`}>
               {repo.name}
             </p>
-            <p className="mt-1 font-mono text-xs leading-relaxed text-muted">
+            <p className={`mt-1 font-mono leading-relaxed text-muted ${repoDesc}`}>
               {repo.description}
             </p>
-            <div className="mt-3 flex flex-wrap gap-1">
+            <div className={`mt-2 flex flex-wrap gap-1 sm:mt-3`}>
               {repo.langs.map((lang) => (
                 <span
                   key={lang}
-                  className={`rounded border px-1.5 py-0.5 font-mono text-[0.7rem] ${LANG_COLORS[lang] ?? 'text-muted border-border'}`}
+                  className={`rounded border px-1.5 py-0.5 font-mono ${langTag} ${LANG_COLORS[lang] ?? 'text-muted border-border'}`}
                 >
                   {lang}
                 </span>

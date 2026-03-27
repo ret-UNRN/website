@@ -51,11 +51,11 @@ export default function Desktop() {
   if (isMobileLayout) return <MobileDesktop />
 
   const handleIconClick = (id: AppId) => {
-    const isOpen = windows.some((w) => w.id === id)
-    if (isOpen) {
+    const win = windows.find((w) => w.id === id)
+    if (win && !win.minimized) {
       focusWindow(id)
     } else {
-      openWindow(id)
+      openWindow(id) // handles both new windows and restoring minimized ones
     }
   }
 
@@ -64,10 +64,10 @@ export default function Desktop() {
       {/* GNOME-style top panel */}
       <Taskbar />
 
-      {/* Desktop area with icons and windows */}
-      <div className="relative flex-1 overflow-hidden">
-        {/* Icon grid */}
-        <div className="flex flex-wrap gap-2 p-3 pt-4 sm:flex-col sm:gap-3 sm:p-4 sm:pt-5">
+      {/* Desktop area: icon sidebar + window area */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Icon sidebar — full height, icons distributed evenly */}
+        <div className="flex w-[90px] shrink-0 flex-col justify-around py-2">
           {APPS.map((app, i) => (
             <div
               key={app.id}
@@ -83,24 +83,26 @@ export default function Desktop() {
           ))}
         </div>
 
-        {/* Windows */}
-        {windows.map((win) => {
-          const app = APPS.find((a) => a.id === win.id)
-          const AppComponent = APP_COMPONENTS[win.id]
-          if (!AppComponent) return null
-          const icon = app?.icon ?? APPS[0].icon
+        {/* Window area — windows are bounded here */}
+        <div className="relative flex-1 overflow-hidden">
+          {windows.map((win) => {
+            const app = APPS.find((a) => a.id === win.id)
+            const AppComponent = APP_COMPONENTS[win.id]
+            if (!AppComponent) return null
+            const icon = app?.icon ?? APPS[0].icon
 
-          return (
-            <Window
-              key={win.id}
-              id={win.id}
-              title={APP_TITLES[win.id]}
-              icon={icon}
-            >
-              <AppComponent />
-            </Window>
-          )
-        })}
+            return (
+              <Window
+                key={win.id}
+                id={win.id}
+                title={APP_TITLES[win.id]}
+                icon={icon}
+              >
+                <AppComponent />
+              </Window>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

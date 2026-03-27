@@ -1,5 +1,5 @@
 import { useEffect, useState, type ComponentType } from 'react'
-import { Circle, Github, Mail } from 'lucide-react'
+import { Circle, Github, Mail, ChevronLeft } from 'lucide-react'
 import DiscordIcon from '../ui/DiscordIcon'
 import { useDesktopStore } from '../../store/useDesktopStore'
 import type { AppId } from '../../store/useDesktopStore'
@@ -90,6 +90,7 @@ export default function MobileDesktop() {
         </div>
       </div>
 
+
       {/* Content area — between bars */}
       <div className="fixed inset-x-0 top-[2.75rem] bottom-[2.75rem] overflow-hidden">
 
@@ -99,45 +100,74 @@ export default function MobileDesktop() {
           style={{ opacity: hasActiveWindow ? 0 : 1, pointerEvents: hasActiveWindow ? 'none' : 'auto' }}
         >
           {/* Widget */}
-          <div className="mx-4 mt-4 rounded-2xl border border-border bg-surface px-4 py-4 animate-[slide-in_250ms_ease-out_both]">
-            <p className="mb-0.5 font-mono text-xs text-muted">Club de Programación</p>
-            <p className="font-mono text-lg font-bold leading-tight text-text">
-              ret<span className="text-accent">UNRN</span>
-            </p>
-            <p className="mt-1.5 mb-3 font-mono text-xs leading-relaxed text-text/60">
-              Espacio extracurricular de programación de la UNRN Sede Andina, Bariloche.
-            </p>
-
-            {[
-              { label: 'actividad', width: 82 },
-              { label: 'proyectos', width: 60 },
-              { label: 'miembros',  width: 100 },
-            ].map((s) => (
-              <div key={s.label} className="mb-1.5 flex items-center gap-3 font-mono text-xs">
-                <span className="w-14 shrink-0 text-muted">{s.label}</span>
-                <div className="h-[3px] flex-1 overflow-hidden rounded-full bg-surface-2">
-                  <div
-                    className="h-full rounded-full bg-accent transition-[width] duration-1000 ease-out"
-                    style={{ width: mounted ? `${s.width}%` : '0%', transitionDelay: '200ms' }}
-                  />
+          <div className="mx-3 mt-3 rounded-2xl border border-border bg-surface px-4 py-3 animate-[slide-in_250ms_ease-out_both] space-y-2.5">
+            {/* Header with member counter */}
+            <div className="flex items-start justify-between gap-2">
+              {/* Meta + Heading */}
+              <div>
+                <p className="font-mono text-[0.65rem] tracking-wider text-muted">
+                  // Bariloche - Argentina · <span className="text-accent">2026</span>
+                </p>
+                <h1 className="mt-1 font-mono text-base font-bold leading-tight text-text">
+                  Club de
+                  <br />
+                  Programación
+                </h1>
+                <div className="font-mono text-base font-bold leading-tight text-text">
+                  ret<span className="text-accent">UNRN</span>
                 </div>
               </div>
-            ))}
 
-            <div className="mt-3 mb-3 flex gap-1.5">
+              {/* Member counter — compact, top right */}
+              <div className="flex items-center gap-1 rounded border border-green/30 bg-green/5 px-2 py-1.5 shrink-0">
+                <div className="h-1 w-1 rounded-full bg-green" />
+                <div className="font-mono text-[0.6rem] text-text whitespace-nowrap">
+                  <span className="text-green">{mounted ? 40 : 0}</span>
+                  <span className="text-muted"> activos</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Prompt */}
+            <div>
+              <p className="font-mono text-[0.7rem] text-green">
+                &gt;&gt;&gt; <span className="text-text">Un espacio abierto y colaborativo</span>
+              </p>
+            </div>
+
+            {/* Activities list — comprimido */}
+            <div>
+              <p className="mb-1.5 font-mono text-[0.65rem] font-bold text-accent">¿Qué podés hacer?</p>
+              <ul className="space-y-1 font-mono text-[0.65rem] text-text/80">
+                <li className="flex gap-1.5">
+                  <span className="shrink-0 text-green">→</span>
+                  <span>Entrenar para competencias</span>
+                </li>
+                <li className="flex gap-1.5">
+                  <span className="shrink-0 text-green">→</span>
+                  <span>Proyectos open-source</span>
+                </li>
+                <li className="flex gap-1.5">
+                  <span className="shrink-0 text-green">→</span>
+                  <span>Aprender y crecer</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-1.5 pt-1">
               <button
                 onClick={() => handleIconClick('about')}
-                className="flex-1 touch-manipulation rounded-lg border border-border py-2 font-mono text-xs text-muted transition-colors active:text-text"
+                className="flex-1 touch-manipulation rounded-lg border border-border px-3 py-1.5 font-mono text-[0.7rem] text-text transition-colors active:bg-surface-2"
                 style={{ animation: launchingId === 'about' ? 'icon-launch 120ms ease-out both' : undefined }}
               >
                 Conocé el club
               </button>
               <button
                 onClick={() => handleIconClick('form')}
-                className="flex-1 touch-manipulation rounded-lg bg-accent py-2 font-mono text-xs font-medium text-white transition-colors active:bg-accent-h"
+                className="flex-1 touch-manipulation rounded-lg bg-accent px-3 py-1.5 font-mono text-[0.7rem] font-medium text-white transition-colors active:bg-accent-h"
                 style={{ animation: launchingId === 'form' ? 'icon-launch 120ms ease-out both' : undefined }}
               >
-
                 Quiero ser parte
               </button>
             </div>
@@ -175,7 +205,7 @@ export default function MobileDesktop() {
             })}
             {/* Row 2: links */}
             <a
-              href="https://discord.gg/PENDIENTE"
+              href="https://discord.gg/eFwypv6w"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-col items-center gap-1.5 touch-manipulation active:scale-95 transition-transform duration-100"
@@ -221,6 +251,7 @@ export default function MobileDesktop() {
         const app = APPS.find((a) => a.id === win.id)
         const AppComponent = APP_COMPONENTS[win.id]
         if (!AppComponent || win.minimized || !app) return null
+        const Icon = app.icon
 
         return (
           <div
@@ -235,6 +266,30 @@ export default function MobileDesktop() {
                 : 'slide-up 200ms ease-out both',
             }}
           >
+            {/* Nav bar integrada: volver + título */}
+            <div
+              className="flex h-10 shrink-0 items-center border-b border-border px-1"
+              style={{ animation: 'back-btn-in 250ms cubic-bezier(0.34,1.56,0.64,1) both', animationDelay: '60ms' }}
+            >
+              <button
+                onClick={handleHome}
+                className="flex items-center gap-0.5 touch-manipulation rounded-lg px-2 py-2 text-text/60 active:bg-surface-2 active:text-text"
+                aria-label="Volver"
+              >
+                <ChevronLeft size={16} strokeWidth={2} />
+                <span className="font-mono text-xs">volver</span>
+              </button>
+              <div className="flex flex-1 items-center justify-center gap-1.5">
+                <Icon size={12} className="text-text/50" />
+                <span className="font-mono text-xs text-text/60">{app.label}</span>
+              </div>
+              {/* Spacer invisible para centrar el título visualmente */}
+              <div className="flex items-center gap-0.5 px-2 py-2 invisible pointer-events-none" aria-hidden="true">
+                <ChevronLeft size={16} strokeWidth={2} />
+                <span className="font-mono text-xs">volver</span>
+              </div>
+            </div>
+
             <div className="min-h-0 flex-1 overflow-auto">
               <AppComponent />
             </div>
