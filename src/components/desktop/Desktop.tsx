@@ -67,7 +67,7 @@ export default function Desktop() {
       {/* Desktop area: icon sidebar + window area */}
       <div className="flex flex-1 overflow-hidden">
         {/* Icon sidebar — full height, icons distributed evenly */}
-        <div className="flex w-[90px] shrink-0 flex-col justify-around py-2">
+        <div className="flex w-[90px] shrink-0 flex-col justify-around py-2 pl-2">
           {APPS.map((app, i) => (
             <div
               key={app.id}
