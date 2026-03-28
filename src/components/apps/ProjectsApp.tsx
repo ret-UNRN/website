@@ -12,43 +12,31 @@ interface Repo {
 
 const REPOS: Repo[] = [
   {
-    name: 'retunrn-web',
+    name: 'Esta página',
     description: 'Sitio web oficial del club — retUNRN OS',
     langs: ['TypeScript', 'React'],
-    url: 'https://github.com/ret-unrn/retunrn-web',
+    url: 'https://github.com/ret-unrn/website-v2',
   },
   {
-    name: 'competitive-programming',
-    description: 'Soluciones y recursos para programación competitiva (ICPC)',
-    langs: ['C++'],
-    url: 'https://github.com/ret-unrn/competitive-programming',
-  },
-  {
-    name: 'workshops',
-    description: 'Material de talleres y charlas del club',
-    langs: ['Markdown'],
-    url: 'https://github.com/ret-unrn/workshops',
-  },
-  {
-    name: 'algoritmos-unrn',
-    description: 'Implementaciones de algoritmos para la cursada',
-    langs: ['Python', 'C++'],
-    url: 'https://github.com/ret-unrn/algoritmos-unrn',
+    name: 'DOMA',
+    description: 'Genera y ejecuta código python programando con un diagrama de flujo',
+    langs: ['TypeScript', 'React'],
+    url: 'https://github.com/ret-unrn/DOMA',
   },
 ]
 // ─────────────────────────────────────────────────────────────────────────────
 
 const LANG_COLORS: Record<string, string> = {
   TypeScript: 'text-blue-400 border-blue-400/30',
-  React:      'text-cyan-400 border-cyan-400/30',
-  'C++':      'text-purple-400 border-purple-400/30',
-  Python:     'text-yellow-400 border-yellow-400/30',
-  Markdown:   'text-green border-green/30',
+  React: 'text-cyan-400 border-cyan-400/30',
+  'C++': 'text-purple-400 border-purple-400/30',
+  Python: 'text-yellow-400 border-yellow-400/30',
+  Markdown: 'text-green border-green/30',
   JavaScript: 'text-yellow-300 border-yellow-300/30',
-  Go:         'text-cyan-300 border-cyan-300/30',
-  Rust:       'text-orange-400 border-orange-400/30',
-  Java:       'text-accent border-accent/30',
-  Shell:      'text-green border-green/30',
+  Go: 'text-cyan-300 border-cyan-300/30',
+  Rust: 'text-orange-400 border-orange-400/30',
+  Java: 'text-accent border-accent/30',
+  Shell: 'text-green border-green/30',
 }
 
 const LOADING_LINES = [
