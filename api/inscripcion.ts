@@ -40,11 +40,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           <!-- Header -->
           <tr>
             <td style="padding-bottom:24px;">
-              <p style="margin:0;font-size:11px;color:#666666;letter-spacing:2px;">// UNRN SEDE ANDINA · BARILOCHE</p>
+              <p style="margin:0;font-size:11px;color:#999999;letter-spacing:2px;">// UNRN SEDE ANDINA · BARILOCHE</p>
               <h1 style="margin:8px 0 0;font-size:28px;font-weight:bold;color:#e8e8e8;letter-spacing:-0.5px;">
-                ret<span style="color:#cc0000;">UNRN</span>
+                ret<span style="color:#eb1f40;">UNRN</span>
               </h1>
-              <p style="margin:4px 0 0;font-size:11px;color:#666666;">Club de Programación</p>
+              <p style="margin:4px 0 0;font-size:11px;color:#999999;">Club de Programación</p>
             </td>
           </tr>
 
@@ -57,8 +57,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           <tr>
             <td style="background-color:#1a1a1a;border:1px solid #2e2e2e;border-radius:6px;padding:28px;">
 
-              <p style="margin:0 0 6px;font-size:12px;color:#666666;">
-                $ welcome <span style="color:#cc0000;">${firstName}</span>
+              <p style="margin:0 0 6px;font-size:12px;color:#999999;">
+                $ welcome <span style="color:#eb1f40;">${firstName}</span>
               </p>
               <h2 style="margin:0 0 20px;font-size:18px;font-weight:bold;color:#e8e8e8;">
                 Ya sos parte del club.
@@ -72,10 +72,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#242424;border:1px solid #2e2e2e;border-radius:4px;margin-bottom:24px;">
                 <tr>
                   <td style="padding:16px;">
-                    <p style="margin:0 0 8px;font-size:11px;color:#666666;">— tu inscripción</p>
-                    <p style="margin:0 0 6px;font-size:12px;color:#e8e8e8;"><span style="color:#cc0000;">nombre</span>      ${nombre}</p>
-                    <p style="margin:0 0 6px;font-size:12px;color:#e8e8e8;"><span style="color:#cc0000;">institución</span>  ${institucion}</p>
-                    <p style="margin:0;font-size:12px;color:#e8e8e8;"><span style="color:#cc0000;">nivel</span>        ${nivel_programacion}</p>
+                    <p style="margin:0 0 8px;font-size:11px;color:#999999;">— tu inscripción</p>
+                    <p style="margin:0 0 6px;font-size:12px;color:#e8e8e8;"><span style="color:#eb1f40;">nombre</span>      ${nombre}</p>
+                    <p style="margin:0 0 6px;font-size:12px;color:#e8e8e8;"><span style="color:#eb1f40;">institución</span>  ${institucion}</p>
+                    <p style="margin:0;font-size:12px;color:#e8e8e8;"><span style="color:#eb1f40;">nivel</span>        ${nivel_programacion}</p>
                   </td>
                 </tr>
               </table>
@@ -83,7 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               <!-- CTA -->
               <table cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
                 <tr>
-                  <td style="background-color:#cc0000;border-radius:4px;">
+                  <td style="background-color:#eb1f40;border-radius:4px;">
                     <a href="https://github.com/ret-unrn" style="display:inline-block;padding:10px 20px;font-size:12px;font-weight:bold;color:#ffffff;text-decoration:none;letter-spacing:0.5px;">
                       → github.com/ret-unrn
                     </a>
@@ -91,8 +91,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 </tr>
               </table>
 
-              <p style="margin:0;font-size:12px;color:#666666;line-height:1.6;">
-                Cualquier consulta respondé este mail o escribinos a <span style="color:#cc0000;">info@retunrn.org</span>
+              <p style="margin:0;font-size:12px;color:#999999;line-height:1.6;">
+                Cualquier consulta respondé este mail o escribinos a <span style="color:#eb1f40;">info@retunrn.org</span>
               </p>
 
             </td>
@@ -102,7 +102,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           <tr>
             <td style="padding-top:20px;">
               <p style="margin:0;font-size:11px;color:#444444;text-align:center;">
-                ret<span style="color:#cc0000;">UNRN</span> · Anasagasti 1463, Bariloche, Río Negro · <a href="https://www.retunrn.org" style="color:#444444;">retunrn.org</a>
+                ret<span style="color:#eb1f40;">UNRN</span> · Anasagasti 1463, Bariloche, Río Negro · <a href="https://www.retunrn.org" style="color:#444444;">retunrn.org</a>
               </p>
             </td>
           </tr>

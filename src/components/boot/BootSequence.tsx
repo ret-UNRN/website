@@ -38,7 +38,7 @@ const typeColor = (type: string): string =>
   ({
     ok: '#00cc66',
     warn: '#ffff00',
-    err: '#cc0000',
+    err: '#eb1f40',
     info: '#e8e8e8',
   })[type] ?? '#e8e8e8'
 
@@ -153,7 +153,7 @@ export default function BootSequence() {
   const rootHeight = vh > 0 ? `${vh}px` : '100vh'
 
   return (
-    <div
+    <main
       className="relative w-full overflow-hidden font-mono text-sm"
       style={{ backgroundColor: '#0d0d0d', color: '#e8e8e8', height: rootHeight }}
     >
@@ -175,13 +175,13 @@ export default function BootSequence() {
           }}
         >
           <div className="text-center text-xs leading-tight tracking-wider">
-            <span style={{ color: '#cc0000' }}>&gt;_</span>
+            <span style={{ color: '#eb1f40' }}>&gt;_</span>
             <br />
             <span style={{ color: '#e8e8e8' }}>ret</span>
-            <span style={{ color: '#cc0000' }}>UNRN</span>
-            <span style={{ color: '#cc0000' }}>;</span>
+            <span style={{ color: '#eb1f40' }}>UNRN</span>
+            <span style={{ color: '#eb1f40' }}>;</span>
           </div>
-          <div className="text-xs tracking-[0.15em]" style={{ color: '#666666' }}>
+          <div className="text-xs tracking-[0.15em]" style={{ color: '#999999' }}>
             RETUNRN OS v2026.1
           </div>
         </div>
@@ -206,11 +206,11 @@ export default function BootSequence() {
           {/* ASCII progress bar — inline as the next log line */}
           {(phase === 'log' || phase === 'progress') && (
             <div className="mt-1 whitespace-nowrap">
-              <span style={{ color: '#888888' }}>iniciando sistema... </span>
-              <span style={{ color: '#cc0000' }}>
+              <span style={{ color: '#999999' }}>iniciando sistema... </span>
+              <span style={{ color: '#eb1f40' }}>
                 {buildAsciiBar(displayProgress, getBarWidth())}
               </span>
-              <span style={{ color: '#888888' }}>
+              <span style={{ color: '#999999' }}>
                 {' '}
                 {String(displayProgress).padStart(3, ' ')}%
               </span>
@@ -242,7 +242,7 @@ export default function BootSequence() {
             }}
           >
             <span style={{ color: '#e8e8e8' }}>ret</span>
-            <span style={{ color: '#cc0000' }}>UNRN</span>
+            <span style={{ color: '#eb1f40' }}>UNRN</span>
           </div>
         ) : (
           <img
@@ -281,6 +281,6 @@ export default function BootSequence() {
           CLUB DE PROGRAMACI&Oacute;N &middot; UNRN &middot; BARILOCHE
         </div>
       </div>
-    </div>
+    </main>
   )
 }
