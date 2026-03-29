@@ -23,7 +23,6 @@ export const COMMANDS: Record<string, (args: string[]) => string | string[]> = {
     '  uname -a      info del sistema',
     '  uptime        tiempo desde que cargó la página',
     '  git log       historial de commits',
-    '  fortune       sabiduría aleatoria',
     '  neofetch      info del sistema estilo neofetch',
     '  cowsay <msg>  lo que dice la vaca',
     '  coffee        cafeína',
