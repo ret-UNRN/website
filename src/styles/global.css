@@ -9,9 +9,9 @@
   --color-surface-2: #242424;
   --color-border: #2e2e2e;
   --color-text: #e8e8e8;
-  --color-muted: #666666;
-  --color-accent: #e53535;
-  --color-accent-h: #ff4444;
+  --color-muted: #999999;
+  --color-accent: #eb1f40;
+  --color-accent-h: #ff3357;
   --color-green: #00cc66;
 
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -26,8 +26,8 @@
   --color-border: #d0d0d0;
   --color-text: #0d0d0d;
   --color-muted: #555555;
-  --color-accent: #b80000;
-  --color-accent-h: #950000;
+  --color-accent: #eb1f40;
+  --color-accent-h: #c01535;
   --color-green: #008844;
 }
 
@@ -206,9 +206,9 @@ body {
   z-index: -1;
   filter: blur(90px);
   background:
-    radial-gradient(ellipse 70% 70% at 15% 85%, rgba(204, 0, 0, 0.3) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 60% at 85% 15%, rgba(204, 0, 0, 0.2) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 50% at 60% 60%, rgba(204, 0, 0, 0.35) 0%, transparent 75%);
+    radial-gradient(ellipse 70% 70% at 15% 85%, rgba(235, 31, 64, 0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 60% at 85% 15%, rgba(235, 31, 64, 0.2) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 60% 60%, rgba(235, 31, 64, 0.35) 0%, transparent 75%);
   animation: wallpaper-shift 30s ease-in-out infinite alternate;
 }
 
@@ -218,9 +218,9 @@ body {
 
 .light .desktop-grid::before {
   background:
-    radial-gradient(ellipse 70% 70% at 15% 85%, rgba(204, 0, 0, 0.25) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 60% at 85% 15%, rgba(204, 0, 0, 0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 50% at 60% 60%, rgba(204, 0, 0, 0.15) 0%, transparent 75%);
+    radial-gradient(ellipse 70% 70% at 15% 85%, rgba(235, 31, 64, 0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 60% at 85% 15%, rgba(235, 31, 64, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 60% 60%, rgba(235, 31, 64, 0.15) 0%, transparent 75%);
 }
 
 @keyframes wallpaper-shift {

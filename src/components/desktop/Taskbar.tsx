@@ -10,7 +10,7 @@ export default function Taskbar() {
       <div className="flex flex-1 items-center">
         <span className="text-xs text-text">
           ret<span className="font-bold text-accent">UNRN</span>
-          <span className="ml-1.5 text-muted/50">OS</span>
+          <span className="ml-1.5 text-muted">OS</span>
         </span>
       </div>
 
