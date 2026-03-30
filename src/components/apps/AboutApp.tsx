@@ -14,7 +14,7 @@ const TEAM = [
   { name: 'Celso Brizuela', role: 'Coordinador · Tesorero' },
   { name: 'Ezequiel Navone', role: 'Coordinador' },
   { name: 'Fernando Giménez', role: 'Coordinador' },
-  { name: 'Paola Britos', role: 'Directora Ing. Computación - UNRN' },
+  { name: 'Paola Britos', role: 'Directora Ing. en Computación · UNRN' },
 ]
 
 const LINKS = [
