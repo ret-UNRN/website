@@ -1,6 +1,7 @@
 import { useEffect, useState, type ComponentType } from 'react'
 import { Circle, Github, Mail, ChevronLeft } from 'lucide-react'
 import DiscordIcon from '../ui/DiscordIcon'
+import InstagramIcon from '../ui/InstagramIcon'
 import { useDesktopStore } from '../../store/useDesktopStore'
 import type { AppId } from '../../store/useDesktopStore'
 import { APPS } from '../../constants/apps'
@@ -232,6 +233,18 @@ export default function MobileDesktop() {
               )
             })}
             {/* Row 2: links */}
+            <a
+              href="https://www.instagram.com/ret.unrn"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-1.5 touch-manipulation active:scale-95 transition-transform duration-100"
+              style={{ animation: 'slide-in 200ms ease-out both', animationDelay: '200ms' }}
+            >
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-sm">
+                <InstagramIcon size={24} className="text-text/70" />
+              </div>
+              <span className="w-full text-center font-mono text-[0.7rem] leading-tight text-text/60">instagram</span>
+            </a>
             <a
               href="https://discord.gg/eFwypv6w"
               target="_blank"

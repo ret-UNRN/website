@@ -88,6 +88,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                       → github.com/ret-unrn
                     </a>
                   </td>
+                  <td style="width:8px;"></td>
+                  <td style="background-color:#242424;border:1px solid #2e2e2e;border-radius:4px;">
+                    <a href="https://www.instagram.com/ret.unrn" style="display:inline-block;padding:10px 20px;font-size:12px;font-weight:bold;color:#e8e8e8;text-decoration:none;letter-spacing:0.5px;">
+                      → @ret.unrn
+                    </a>
+                  </td>
                 </tr>
               </table>
 

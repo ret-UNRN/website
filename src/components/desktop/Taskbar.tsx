@@ -2,6 +2,7 @@ import { Github } from 'lucide-react'
 import Clock from '../ui/Clock'
 import ThemeToggle from '../ui/ThemeToggle'
 import DiscordIcon from '../ui/DiscordIcon'
+import InstagramIcon from '../ui/InstagramIcon'
 
 export default function Taskbar() {
   return (
@@ -21,6 +22,15 @@ export default function Taskbar() {
 
       {/* Right: System indicators */}
       <div className="flex items-center gap-1">
+        <a
+          href="https://www.instagram.com/ret.unrn"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center rounded p-1 text-muted transition-colors hover:text-text"
+          aria-label="Instagram"
+        >
+          <InstagramIcon size={14} />
+        </a>
         <a
           href="https://discord.gg/eFwypv6w"
           target="_blank"
