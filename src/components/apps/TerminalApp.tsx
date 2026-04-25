@@ -11,12 +11,20 @@ const OPENABLE: Record<string, AppId> = {
   inscripcion: 'form',
   proyectos: 'projects',
   agenda: 'calendar',
+  noticias: 'news',
   contacto: 'contact',
   terminal: 'terminal',
 }
 
 function Prompt({ isMobile }: { isMobile: boolean }) {
-  return <span className={`shrink-0 text-green ${isMobile ? 'text-xs' : 'text-sm'}`}>user@retunrn:~$</span>
+  return (
+    <span className={`shrink-0 text-green ${isMobile ? 'text-xs' : 'text-sm'}`}>
+      user@retunrn
+      <span className="text-white">:</span>
+      <span className="text-cyan-500">~</span>
+      <span className="text-white">$ </span>
+    </span>
+  )
 }
 
 export default function TerminalApp() {

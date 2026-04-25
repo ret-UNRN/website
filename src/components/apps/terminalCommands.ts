@@ -34,7 +34,7 @@ export const COMMANDS: Record<string, (args: string[]) => string | string[]> = {
   whoami: () => 'Una maquina de la programación',
 
   ls: () => [
-    'inicio  quienes-somos  inscripcion  proyectos  agenda  contacto  terminal',
+    'inicio  quienes-somos  inscripcion  proyectos  agenda  noticias  contacto  terminal',
   ],
 
   'uname -a': () =>

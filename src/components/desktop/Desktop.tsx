@@ -12,6 +12,7 @@ import CalendarApp from '../apps/CalendarApp'
 import ContactApp from '../apps/ContactApp'
 import TerminalApp from '../apps/TerminalApp'
 import FormApp from '../apps/FormApp'
+import NewsApp from '../apps/NewsApp'
 import type { AppId } from '../../store/useDesktopStore'
 import { useWindowSize } from '../../hooks/useWindowSize'
 
@@ -20,6 +21,7 @@ const APP_COMPONENTS: Record<AppId, ComponentType> = {
   about: AboutApp,
   projects: ProjectsApp,
   calendar: CalendarApp,
+  news: NewsApp,
   contact: ContactApp,
   terminal: TerminalApp,
   form: FormApp,
@@ -30,6 +32,7 @@ const APP_TITLES: Record<AppId, string> = {
   about: 'quienes-somos',
   projects: 'proyectos',
   calendar: 'agenda',
+  news: 'noticias',
   contact: 'contacto',
   terminal: 'terminal',
   form: 'inscripcion',

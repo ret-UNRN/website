@@ -13,12 +13,14 @@ import CalendarApp from '../apps/CalendarApp'
 import ContactApp from '../apps/ContactApp'
 import TerminalApp from '../apps/TerminalApp'
 import FormApp from '../apps/FormApp'
+import NewsApp from '../apps/NewsApp'
 
 const APP_COMPONENTS: Record<AppId, ComponentType> = {
   welcome: WelcomeApp,
   about: AboutApp,
   projects: ProjectsApp,
   calendar: CalendarApp,
+  news: NewsApp,
   contact: ContactApp,
   terminal: TerminalApp,
   form: FormApp,
@@ -203,8 +205,8 @@ export default function MobileDesktop() {
 
           </div>
 
-          {/* App grid — two rows */}
-          <div className="mt-auto grid grid-cols-3 gap-x-2 gap-y-3 px-6 pb-5">
+          {/* App grid — two rows (apps + links) */}
+          <div className="mt-auto grid grid-cols-4 gap-x-1 gap-y-3 px-4 pb-5">
             {/* Row 1: apps */}
             {APPS.filter((a) => !['welcome', 'about', 'contact', 'form'].includes(a.id)).map((app, i) => {
               const Icon = app.icon

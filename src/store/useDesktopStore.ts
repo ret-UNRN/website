@@ -5,6 +5,7 @@ export type AppId =
   | 'about'
   | 'projects'
   | 'calendar'
+  | 'news'
   | 'contact'
   | 'terminal'
   | 'form'
